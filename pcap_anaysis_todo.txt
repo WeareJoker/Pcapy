@@ -1,0 +1,4 @@
+1. HTTP cookie (check enable)
+2. ARP (IP <--> MAC mapping
+3. DNS analysis
+4. Kakaotalk packet
