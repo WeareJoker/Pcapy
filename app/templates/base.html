@@ -30,8 +30,8 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <script src="{{ url_for('main.js_static', filename='jquery.js') }}"></script>
-    <script src="{{ url_for('main.js_static', filename='jquery-2.1.1.min.js') }}"></script>
+    <script src="{{ url_for('js_static', filename='jquery.js') }}"></script>
+    <script src="{{ url_for('js_static', filename='jquery-2.1.1.min.js') }}"></script>
 
     {% block head %}
     {% endblock %}
@@ -159,7 +159,7 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li class="active">
-                        <a href="{{ url_for('main.index') }}"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                        <a href="{{ url_for('index') }}"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
                     </li>
                     <li>
                         <a href="charts.html"><i class="fa fa-fw fa-bar-chart-o"></i> DNS</a>
@@ -168,7 +168,7 @@
                         <a href="tables.html"><i class="fa fa-fw fa-table"></i> Cookie</a>
                     </li>
                     <li>
-                        <a href="{{ url_for('main.upload_pcap') }}"><i class="fa fa-fw fa-edit"></i> Forms</a>
+                        <a href="{{ url_for('upload_pcap') }}"><i class="fa fa-fw fa-edit"></i> Forms</a>
                     </li>
                     <li>
                         <a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>

@@ -7,6 +7,7 @@ from celery import Celery
 from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+db = SQLAlchemy(app)
 app.config.from_pyfile('config.py')
 
 
@@ -26,6 +27,9 @@ def make_celery(app):
     c.Task = ContextTask
     return c
 
-db = SQLAlchemy(app)
+
 celery = make_celery(app)
+
 manager = Manager(app)
+
+from .views import *
