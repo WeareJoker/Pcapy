@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 from flask import Flask
-from flask.ext.script import Manager
+from flask_script import Manager
 from celery import Celery
 
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate, MigrateCommand
 
 app = Flask(__name__)
 db = SQLAlchemy(app)
@@ -31,5 +32,8 @@ def make_celery(app):
 celery = make_celery(app)
 
 manager = Manager(app)
+manager.add_command('db', MigrateCommand)
+
+migrate = Migrate(app, db)
 
 from .views import *

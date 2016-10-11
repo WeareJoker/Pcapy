@@ -1,15 +1,44 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-from flask import render_template, send_file, send_from_directory, request
+from flask import render_template, send_file, send_from_directory, request, redirect, url_for
 
 from . import app
 from .config import *
-
+from .long_task import db_test
 from .models import *
+
+try:
+    import MySQLdb
+except ImportError:
+    import pymysql
+
+    pymysql.install_as_MySQLdb()
+
+from flask import stream_with_context, request, Response
+
+import time
+
+@app.route('/stream')
+def streamed_response():
+    def generate():
+        yield 'Hello '
+        time.sleep(2)
+        yield request.args['name']
+        time.sleep(3)
+        yield '!'
+
+    return Response(stream_with_context(generate()))
 
 
 @app.route('/')
 def index():
+    return redirect(url_for('upload_pcap'))
+
+
+@app.route('/result/<string:pcapname>')
+def result(pcapname):
+    test = db_test.delay()
+    print(test)
     return render_template('main/index.html')
 
 

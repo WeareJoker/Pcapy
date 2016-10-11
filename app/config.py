@@ -15,5 +15,6 @@ CELERY_BROKER_URL = 'amqp://localhost'
 CELERY_RESULT_BACKEND = 'amqp://localhost'
 CELERY_BACKEND = 'amqp://'
 
+SQLALCHEMY_TRACK_MODIFICATIONS = True
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(PROJECT_ROOT, 'testdb.db')
 SECRET_KEY = 'development-key'

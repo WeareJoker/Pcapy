@@ -2,8 +2,17 @@
 
 {% block head %}
     <script>
+        function getExtension(filename) {
+            var parts = filename.split('.');
+            return parts[parts.length - 1];
+        }
+
         $(document).ready(function(){
             $('form#pcap_form').on('submit', function(event) {
+                if(getExtension($('#pcap_file').val()) != 'pcap'){
+                    alert('확장자가 pcap인 파일만 업로드 가능합니다.');
+                    return false
+                }
                 event.preventDefault();
 
                 var formData = new FormData($(this)[0]);
@@ -25,8 +34,8 @@
                     processData: false,
                     contentType: false,
 
-                    success: function() {
-                        alert("File Uploaded!");
+                    success: function(response) {
+                        window.location.replace('/' + response);
                     }
                 });
                 return false;
@@ -47,14 +56,14 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Add your pcap
+                            Upload
                         </h1>
                         <ol class="breadcrumb">
                             <li>
                                 <i class="fa fa-dashboard"></i>  <a href="{{ url_for('index') }}">Dashboard</a>
                             </li>
                             <li class="active">
-                                <i class="fa fa-edit"></i> Add your pcap
+                                <i class="fa fa-edit"></i> Upload
                             </li>
                         </ol>
                     </div>
@@ -87,7 +96,7 @@
 
                             <div class="form-group">
                                 <label>Upload pcap</label>
-                                <input type="file" name="pcap">
+                                <input id="pcap_file" type="file" name="pcap">
                             </div>
                             <button type="submit" class="btn btn-default">Submit Button</button>
                             <button type="reset" class="btn btn-default">Reset Button</button>
