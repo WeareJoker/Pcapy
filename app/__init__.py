@@ -11,7 +11,13 @@ def create_app():
 
     app.register_blueprint(main_blueprint)
 
+    app.config.from_pyfile('config.py')
+
     return app
 
+app = create_app()
 
 manager = Manager(app)
+
+
+
