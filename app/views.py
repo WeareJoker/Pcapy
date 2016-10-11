@@ -4,7 +4,7 @@ from flask import render_template, send_file, send_from_directory, request
 
 from . import app
 from .config import *
-from .long_task import test
+from .long_task import save_pcap
 
 
 @app.route('/')
@@ -18,9 +18,12 @@ def upload_pcap():
         return render_template('main/upload_pcap.html')
 
     elif request.method == 'POST':
-        print(request.files)
+        pcap_file = request.files['pcap']
 
-        return "Hello"
+        filename = randomkey(len(pcap_file.filename))
+        save_pcap.delay(filename, pcap_file)
+
+        return filename
 
 
 @app.route('/css/<path:filename>')
