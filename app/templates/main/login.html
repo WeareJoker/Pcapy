@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% block head %}
+    {% for msg in alert_message_list %}
+        <script>alert("{{ msg }}");</script>
+    {% endfor %}
+{% endblock %}
+
 {% block body %}
 
     <div id="page-wrapper">
@@ -26,9 +32,9 @@
 
                 <div class="row">
                     <div class="col-lg-6">
-                        <h2>Login</h2>
+                        <h2>Sign in</h2>
                         <!-- Login -->
-                        <form role="form" action="asdf">
+                        <form role="form" action="{{ url_for('login') }}" id="signin" method="post">
                             <div class="form-group">
                                 <label>UserID</label>
                                 <input class="form-control" placeholder="아이디 입력" name="userid">
@@ -44,7 +50,7 @@
                         <h2>Sign up</h2>
 
                         <!-- UserAdd -->
-                        <form role="form">
+                        <form role="form" id="signup" method="post">
                             <div class="form-group">
                                 <label>UserID</label>
                                 <input class="form-control" placeholder="사용할 아이디를 입력하세요" name="userid">
@@ -82,6 +88,16 @@
             }
             else {
                 $('#userpw_confirm_div')[0].className = "form-group has-error";
+            }
+        });
+
+        $('#signup').on('submit', function(e) {
+            if($('#userpw_confirm_div')[0].className == "form-group has-success"){
+                return true;
+            }
+            else {
+                alert("두 패스워드가 다릅니다!");
+                return false;
             }
         });
     </script>

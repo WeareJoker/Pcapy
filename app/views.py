@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 from flask import render_template, send_file, send_from_directory, request, redirect, url_for
+from sqlalchemy.exc import IntegrityError
 
-from . import app
+from . import app, db
 from .config import *
 from .long_task import db_test
 from .models import *
+from .login_manager import *
 
 try:
     import MySQLdb
@@ -17,6 +19,7 @@ except ImportError:
 from flask import stream_with_context, request, Response
 
 import time
+
 
 @app.route('/stream')
 def streamed_response():
@@ -32,17 +35,16 @@ def streamed_response():
 
 @app.route('/')
 def index():
-    return redirect(url_for('upload_pcap'))
+    return render_template('main/index.html')
 
 
 @app.route('/result/<string:pcapname>')
 def result(pcapname):
-    test = db_test.delay()
-    print(test)
     return render_template('main/index.html')
 
 
-@app.route('/upload_pcap', methods=['GET', 'POST'])
+@login_required
+@app.route('/pcap/upload', methods=['GET', 'POST'])
 def upload_pcap():
     if request.method == 'GET':
         return render_template('main/upload_pcap.html',
@@ -55,6 +57,58 @@ def upload_pcap():
         pcap_file.save(os.path.join(PCAP_FILE_PATH, filename))
 
         return filename
+
+
+@logout_required
+@app.route('/user/account', methods=['GET', 'POST'])
+def account():
+    if request.method == 'GET':
+        msg_list = list()
+
+        msg = request.args.get('msg')
+        if msg is not None:
+            msg_list.append({
+                                '1': '잘못된 아이디 혹은 패스워드 입니다.',
+                                '2': '로그인이 필요합니다.',
+                                '3': '회원가입을 성공하였습니다.'
+                            }.get(msg))
+        return render_template('main/login.html',
+                               alert_message_list=msg_list)
+
+    if request.method == 'POST':
+        data = request.form
+
+        u = User(data['userid'], data['userpw'])
+        db.session.add(u)
+        try:
+            db.session.commit()
+        except IntegrityError:
+            return redirect(url_for('account', msg=1))
+
+        return redirect(url_for('account', msg=3))
+
+
+@logout_required
+@app.route('/user/login', methods=['POST'])
+def login():
+    data = request.form
+    if request.method == 'POST':
+        u = User.query.filter_by(userid=data['userid'], userpw=data['userpw']).first()
+        if u is None:
+            return redirect(url_for('account', error=1))
+        else:
+            login_user(u.userid)
+            return redirect(url_for('index'))
+
+    elif request.method == 'DELETE':
+        logout_user()
+
+
+@login_required
+@app.route('/user/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('account'))
 
 
 @app.route('/css/<path:filename>')
