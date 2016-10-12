@@ -170,7 +170,9 @@
                     <li>
                         <a href="tables.html"><i class="fa fa-fw fa-table"></i> Cookie</a>
                     </li>
-
+                    <li>
+                        <a href="{{ url_for('account') }}"><i class="fa fa-fw fa-desktop"></i> Account</a>
+                    </li>
                     <li>
                         <a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>
                     </li>
@@ -207,14 +209,14 @@
     <!-- /#wrapper -->
 
     <!-- jQuery -->
-    <script src="/js/jquery.js"></script>
+    <script src="{{ url_for('js_static', filename="jquery.js") }}"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('js_static', filename='bootstrap.min.js') }}"></script>
 
     <!-- Morris Charts JavaScript -->
-    <script src="/js/plugins/morris/raphael.min.js"></script>
-    <script src="/js/plugins/morris/morris.min.js"></script>
+    <script src="{{ url_for('js_static', filename="plugins/morris/raphael.min.js") }}"></script>
+    <script src="{{ url_for('js_static', filename="plugins/morris/morris.min.js") }}"></script>
     {% block footer %}
     {% endblock %}
 
