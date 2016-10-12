@@ -23,7 +23,10 @@
                         xhr.upload.addEventListener('progress', function(e) {
 
                             if(e.lengthComputable) {
-                                document.getElementById('pcap_upload_progress_bar').style.width=String((e.loaded / e.total)*100) + "%";
+                                var percentage = (e.loaded / e.total)*100;
+                                var progress_bar = document.getElementById('pcap_upload_progress_bar');
+                                progress_bar.style.width = String(percentage) + "%";
+                                progress_bar.innerText = String(parseInt(percentage)) + "% Finish";
                             }
                         });
                         return xhr;
@@ -104,7 +107,7 @@
                          style="width:0%"
                          id="pcap_upload_progress_bar"
                     >
-                        Finish Upload
+                        Upload
                     </div>
                 </div>
 
