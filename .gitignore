@@ -1,3 +1,8 @@
+# Debugging files
+*.pcap
+*.db
+migrations/
+
 # For IDE files
 .idea/
 
