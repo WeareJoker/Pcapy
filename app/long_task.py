@@ -53,7 +53,7 @@ def analysis_pcap(pcap_path, user):
     """
 
     db_pcap.analysis.total_packet = packet_count
-
+    db_pcap.is_done = True
     db_pcap.when_analysis_finished = datetime.now()
     u.alarm.append(Alarm("Success", "Finish Analysis %s" % db_pcap.fake_filename, simple_content="Finish Analysis"))
 
