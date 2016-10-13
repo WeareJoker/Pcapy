@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-from flask import render_template, send_file, send_from_directory, request, redirect, url_for
+import time
+from flask import stream_with_context, request, Response, session, redirect, url_for
+
+from flask import render_template, send_file, send_from_directory
 from sqlalchemy.exc import IntegrityError
 
 from . import app, db
-from .config import *
-from .long_task import db_test
 from .models import *
-from .login_manager import *
+from .config import *
 
 try:
     import MySQLdb
@@ -16,9 +17,51 @@ except ImportError:
 
     pymysql.install_as_MySQLdb()
 
-from flask import stream_with_context, request, Response
 
-import time
+def login_required(func):
+    def check_login(*args, **kwargs):
+        print(session)
+        try:
+            session['login']
+        except KeyError:
+            session['login'] = False
+        finally:
+            if session['login'] is True:
+                return func(*args, **kwargs)
+            else:
+                return redirect(url_for('account', msg=2))
+
+    return check_login
+
+
+def logout_required(func):
+    def check_logout(*args, **kwargs):
+        try:
+            session['login']
+        except KeyError:
+            session['login'] = False
+        finally:
+            if session['login'] is False:
+                return func(*args, **kwargs)
+            else:
+                return redirect(url_for('index'))
+
+    return check_logout
+
+
+def login_user(userid):
+    session['login'] = True
+    session['userid'] = userid
+
+
+def logout_user():
+    session['login'] = False
+    session['userid'] = None
+
+
+def current_user():
+    u = User.query.filter_by(userid=session['userid']).first()
+    return u
 
 
 @app.route('/stream')
@@ -39,12 +82,13 @@ def index():
 
 
 @app.route('/result/<string:pcapname>')
+@login_required
 def result(pcapname):
     return render_template('main/index.html')
 
 
-@login_required
 @app.route('/pcap/upload', methods=['GET', 'POST'])
+@login_required
 def upload_pcap():
     if request.method == 'GET':
         return render_template('main/upload_pcap.html',
