@@ -101,7 +101,7 @@ def login():
     if request.method == 'POST':
         u = User.query.filter_by(userid=data['userid'], userpw=data['userpw']).first()
         if u is None:
-            return redirect(url_for('account', error=1))
+            return redirect(url_for('account', msg=1))
         else:
             login_user(u.userid)
             return redirect(url_for('index'))
