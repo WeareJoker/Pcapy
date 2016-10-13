@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 import time
-from flask import stream_with_context, request, Response, session, redirect, url_for
 
 from flask import render_template, send_file, send_from_directory
+from flask import stream_with_context, request, Response
 from sqlalchemy.exc import IntegrityError
 
 from . import app, db
-from .models import *
 from .config import *
+from .login_manager import *
+from .models import *
 
 try:
     import MySQLdb
@@ -16,52 +17,6 @@ except ImportError:
     import pymysql
 
     pymysql.install_as_MySQLdb()
-
-
-def login_required(func):
-    def check_login(*args, **kwargs):
-        print(session)
-        try:
-            session['login']
-        except KeyError:
-            session['login'] = False
-        finally:
-            if session['login'] is True:
-                return func(*args, **kwargs)
-            else:
-                return redirect(url_for('account', msg=2))
-
-    return check_login
-
-
-def logout_required(func):
-    def check_logout(*args, **kwargs):
-        try:
-            session['login']
-        except KeyError:
-            session['login'] = False
-        finally:
-            if session['login'] is False:
-                return func(*args, **kwargs)
-            else:
-                return redirect(url_for('index'))
-
-    return check_logout
-
-
-def login_user(userid):
-    session['login'] = True
-    session['userid'] = userid
-
-
-def logout_user():
-    session['login'] = False
-    session['userid'] = None
-
-
-def current_user():
-    u = User.query.filter_by(userid=session['userid']).first()
-    return u
 
 
 @app.route('/stream')
@@ -100,11 +55,15 @@ def upload_pcap():
         filename = randomkey(len(pcap_file.filename))
         pcap_file.save(os.path.join(PCAP_FILE_PATH, filename))
 
-        return filename
+        p = Pcap(filename, pcap_file.filename)
+        db.session.add(p)
+        db.session.commit()
+
+        return redirect(url_for('upload_pcap'))
 
 
-@logout_required
 @app.route('/user/account', methods=['GET', 'POST'])
+@logout_required
 def account():
     if request.method == 'GET':
         msg_list = list()
@@ -132,8 +91,8 @@ def account():
         return redirect(url_for('account', msg=3))
 
 
-@logout_required
 @app.route('/user/login', methods=['POST'])
+@logout_required
 def login():
     data = request.form
     if request.method == 'POST':
@@ -148,8 +107,8 @@ def login():
         logout_user()
 
 
-@login_required
 @app.route('/user/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('account'))
