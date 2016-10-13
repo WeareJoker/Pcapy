@@ -5,6 +5,7 @@ import time
 from flask import render_template, send_file, send_from_directory
 from flask import stream_with_context, request, Response
 from sqlalchemy.exc import IntegrityError
+from .long_task import analysis_pcap
 
 from . import app, db
 from .config import *
@@ -52,11 +53,15 @@ def upload_pcap():
     elif request.method == 'POST':
         pcap_file = request.files['pcap']
 
-        filename = randomkey(len(pcap_file.filename))
-        pcap_file.save(os.path.join(PCAP_FILE_PATH, filename))
+        filetype = pcap_file.filename.split('.')[-1]
+        fake_filename = randomkey(len(pcap_file.filename)) + '.' + filetype
+        filepath = os.path.join(PCAP_FILE_PATH, fake_filename)
+        pcap_file.save(filepath)
 
-        p = Pcap(filename, pcap_file.filename)
+        p = Pcap(fake_filename, pcap_file.filename)
         add_and_commit(db.session, p)
+
+        analysis_pcap(filepath, current_user().userid)
 
         return redirect(url_for('upload_pcap'))
 
