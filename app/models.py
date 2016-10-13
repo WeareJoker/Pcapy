@@ -13,6 +13,7 @@ def add_and_commit(session, obj):
     except:
         session.rollback()
         raise
+    return obj
 
 
 def get_or_create(session, model, **kwargs):
