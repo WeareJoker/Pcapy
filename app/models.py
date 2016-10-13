@@ -6,6 +6,11 @@ from . import db
 from datetime import datetime
 
 
+def add_and_commit(session, obj):
+    session.add(obj)
+    session.commit()
+
+
 def get_or_create(session, model, **kwargs):
     instance = session.query(model).filter_by(**kwargs).first()
     if instance:
@@ -72,21 +77,19 @@ class Pcap(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     fake_filename = db.Column(db.String(50), nullable=False, unique=True)
     filename = db.Column(db.String(50), nullable=False)
-    size = db.Column(db.INTEGER, nullable=False)
     is_done = db.Column(db.BOOLEAN, nullable=False, default=False)
 
     when_upload = db.Column(db.DATETIME, default=datetime.now(), nullable=False)
     when_analysis_started = db.Column(db.DATETIME)
     when_analysis_finished = db.Column(db.DATETIME)
 
-    result = db.relationship(Analysis, backref='pcap')
+    analysis = db.relationship(Analysis, backref='pcap')
 
     user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
 
-    def __init__(self, fake_filename, real_filename, filesize):
+    def __init__(self, fake_filename, real_filename):
         self.fake_filename = fake_filename
         self.filename = real_filename
-        self.size = filesize
 
     def __repr__(self):
         return "<Pcap %s>" % self.filename
