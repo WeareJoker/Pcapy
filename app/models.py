@@ -63,12 +63,28 @@ class Messenger(db.Model):
         return "<Messenger %d>" % self.id
 
 
+class IPMAC(db.Model):
+    id = db.Column(db.INTEGER, primary_key=True)
+    ip = db.Column(db.String(20), nullable=False)
+    mac = db.Column(db.String(20), nullable=False)
+    analysis_id = db.Column(db.INTEGER, db.ForeignKey('analysis.id'))
+
+    def __init__(self, ip, mac):
+        self.ip = ip
+        self.mac = mac
+
+    def __repr__(self):
+        return "<IPMAC %s : %s>" % (self.ip, self.mac)
+
+
 class Analysis(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     pcap_id = db.Column(db.INTEGER, db.ForeignKey('pcap.id'))
     total_packet = db.Column(db.INTEGER, nullable=False)
     dns_packet = db.relationship(DNSHost, backref='analysis')
     messenger_packet = db.relationship(Messenger)
+    ip_mac = db.relationship(IPMAC, backref='analysis')
+    alarm = db.relationship('Alarm', backref='analysis')
 
     def __init__(self):
         pass
@@ -109,9 +125,10 @@ class Alarm(db.Model):
     """
     content = db.Column(db.String(40), nullable=False)
     user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
+    analysis_id = db.Column(db.INTEGER, db.ForeignKey('analysis.id'))
 
-    def __init__(self, type, content):
-        self.type = type
+    def __init__(self, type_id, content):
+        self.type = type_id
         self.content = content
 
     def __repr__(self):
