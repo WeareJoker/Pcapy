@@ -8,7 +8,11 @@ from datetime import datetime
 
 def add_and_commit(session, obj):
     session.add(obj)
-    session.commit()
+    try:
+        session.commit()
+    except:
+        session.rollback()
+        raise
 
 
 def get_or_create(session, model, **kwargs):
