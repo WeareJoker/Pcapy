@@ -45,6 +45,10 @@ def logout_user():
     session['userid'] = None
 
 
-def current_user():
-    u = User.query.filter_by(userid=session['userid']).first()
+def current_user(userid=None):
+    if userid is None:
+        u = User.query.filter_by(userid=session['userid']).first()
+    else:
+        u = User.query.filter_by(userid=userid).first()
+
     return u
