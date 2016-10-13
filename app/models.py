@@ -99,11 +99,31 @@ class Pcap(db.Model):
         return "<Pcap %s>" % self.filename
 
 
+class Alarm(db.Model):
+    id = db.Column(db.INTEGER, primary_key=True)
+    type = db.Column(db.INTEGER, nullable=False)
+    """
+    1: Finish
+    2: Info
+    3: Danger
+    """
+    content = db.Column(db.String(40), nullable=False)
+    user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
+
+    def __init__(self, type, content):
+        self.type = type
+        self.content = content
+
+    def __repr__(self):
+        return "<Alarm %s by %s>" % (self.user.userid, self.type)
+
+
 class User(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     userid = db.Column(db.String(30), nullable=False, unique=True)
     userpw = db.Column(db.String(30), nullable=False)
     pcap = db.relationship(Pcap, backref='user')
+    alarm = db.relationship(Alarm, backref='user')
 
     def __init__(self, userid, userpw):
         self.userid = userid
