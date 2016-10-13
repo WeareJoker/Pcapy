@@ -56,8 +56,7 @@ def upload_pcap():
         pcap_file.save(os.path.join(PCAP_FILE_PATH, filename))
 
         p = Pcap(filename, pcap_file.filename)
-        db.session.add(p)
-        db.session.commit()
+        add_and_commit(db.session, p)
 
         return redirect(url_for('upload_pcap'))
 
@@ -82,9 +81,8 @@ def account():
         data = request.form
 
         u = User(data['userid'], data['userpw'])
-        db.session.add(u)
         try:
-            db.session.commit()
+            add_and_commit(db.session, u)
         except IntegrityError:
             return redirect(url_for('account', msg=1))
 
