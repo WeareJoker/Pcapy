@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 import time
+import json
 
 from flask import render_template, send_file, send_from_directory
 from flask import stream_with_context, request, Response
@@ -57,13 +58,19 @@ def upload_pcap():
         fake_filename = randomkey(len(pcap_file.filename)) + '.' + filetype
         filepath = os.path.join(PCAP_FILE_PATH, fake_filename)
         pcap_file.save(filepath)
+        u = current_user()
 
-        p = Pcap(fake_filename, pcap_file.filename)
+        p = Pcap(fake_filename, pcap_file.filename, u)
+
         add_and_commit(db.session, p)
+
+        u.pcap.append(p)
+
+        db.session.commit()
 
         analysis_pcap(filepath, current_user().userid)
 
-        return redirect(url_for('upload_pcap'))
+        return fake_filename
 
 
 @app.route('/user/account', methods=['GET', 'POST'])
@@ -92,6 +99,20 @@ def account():
             return redirect(url_for('account', msg=1))
 
         return redirect(url_for('account', msg=3))
+
+
+@app.route('/user/alarm', methods=['GET'])
+@login_required
+def alarm():
+    u = current_user()
+    data = dict()
+
+    alarms = Alarm.query.filter_by(user=u).order_by(Alarm.time).limit(5).all()
+
+    for a, idx in zip(alarms, reversed(range(len(alarms)))):
+        data[idx] = [a.type, a.simple_content]
+
+    return json.dumps(data)
 
 
 @app.route('/user/login', methods=['POST'])
