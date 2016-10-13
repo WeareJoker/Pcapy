@@ -86,7 +86,8 @@ class Analysis(db.Model):
     dns_packet = db.relationship(DNSHost, backref='analysis')
     messenger_packet = db.relationship(Messenger)
     ip_mac = db.relationship(IPMAC, backref='analysis')
-    alarm = db.relationship('Alarm', backref='analysis')
+    when_analysis_started = db.Column(db.DATETIME, default=datetime.now())
+    when_analysis_finished = db.Column(db.DATETIME)
 
     def __init__(self):
         pass
@@ -101,10 +102,10 @@ def add_alarm_start_analysis(mapper, connection, target):
     u = p.user
 
     connection.execute(Alarm.__table__.insert().values(
-        type=1,
+        type="Info",
         content="Start Analysis %s" % p.filename),
-        user_id=u.id,
-        analysis_id=target.id
+        simple_content="Start Analysis",
+        user_id=u.id
     )
 
 
@@ -115,39 +116,48 @@ class Pcap(db.Model):
     is_done = db.Column(db.BOOLEAN, nullable=False, default=False)
 
     when_upload = db.Column(db.DATETIME, default=datetime.now(), nullable=False)
-    when_analysis_started = db.Column(db.DATETIME)
-    when_analysis_finished = db.Column(db.DATETIME)
 
     analysis = db.relationship(Analysis, backref='pcap', uselist=False)
 
     user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
 
-    def __init__(self, fake_filename, real_filename):
+    def __init__(self, fake_filename, real_filename, user):
         self.fake_filename = fake_filename
         self.filename = real_filename
+        self.user = user
 
     def __repr__(self):
-        return "<Pcap %s>" % self.filename
+        return "<Pcap %s by %s>" % (self.filename, self.user.userid)
+
+
+@event.listens_for(Pcap, 'after_insert')
+def add_alarm_upload_pcap(mapper, connection, target):
+    u = target.user
+
+    connection.execute(Alarm.__table__.insert().values(
+        type="Success",
+        content="Successfully Upload %s" % target.filename),
+        simple_content="File Uploaded",
+        user_id=u.id
+    )
 
 
 class Alarm(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
-    type = db.Column(db.INTEGER, nullable=False)
-    """
-    1: Finish
-    2: Info
-    3: Danger
-    """
+    type = db.Column(db.String(15), nullable=False)
     content = db.Column(db.String(40), nullable=False)
+    simple_content = db.Column(db.String(20), nullable=False)
+    time = db.Column(db.DATETIME, default=datetime.now(), nullable=False)
     user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
-    analysis_id = db.Column(db.INTEGER, db.ForeignKey('analysis.id'))
 
-    def __init__(self, type_id, content):
+    def __init__(self, type_id, content, simple_content):
         self.type = type_id
         self.content = content
+        if simple_content is not None:
+            self.simple_content = simple_content
 
     def __repr__(self):
-        return "<Alarm %s by %s>" % (self.user.userid, self.type)
+        return "<Alarm %s by %s>" % (self.user.userid, self.content)
 
 
 class User(db.Model):
