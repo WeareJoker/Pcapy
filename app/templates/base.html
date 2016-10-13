@@ -111,7 +111,8 @@
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
-                    <ul class="dropdown-menu alert-dropdown">
+                    <ul id="user_alert_dropdown" class="dropdown-menu alert-dropdown">
+                        <!--
                         <li>
                             <a href="#">Alert Name <span class="label label-default">Alert Badge</span></a>
                         </li>
@@ -130,10 +131,11 @@
                         <li>
                             <a href="#">Alert Name <span class="label label-danger">Alert Badge</span></a>
                         </li>
-                        <li class="divider"></li>
+                        <li id="user_alert_dropdown_divider" class="divider"></li>
                         <li>
                             <a href="#">View All</a>
                         </li>
+                        -->
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -232,6 +234,47 @@
     <script src="{{ url_for('js_static', filename="plugins/morris/morris.min.js") }}"></script>
     {% block footer %}
     {% endblock %}
+
+    <script>
+        setInterval(refresh_alarm, 20000);
+        refresh_alarm();
+
+        function make_new_alarm(type, content) {
+            var newli = document.createElement('li');
+            var newa = document.createElement('a');
+            var newspan = document.createElement('span');
+            if (type == "Info")
+                newspan.className = "label label-info";
+            else if (type == "Success")
+                newspan.className = "label label-success";
+            else if (type == "Error")
+                newspan.className = "label label-danger";
+            newspan.appendChild(document.createTextNode(type));
+            newa.appendChild(document.createTextNode(content + " "));
+            newa.appendChild(newspan);
+            newli.appendChild(newa);
+
+            return newli;
+        }
+
+        function refresh_alarm() {
+            var dropdown = document.getElementById('user_alert_dropdown');
+            dropdown.innerHTML = "";
+            $.get('{{ url_for("alarm") }}', function(data) {
+                var parsed_data = JSON.parse(data);
+
+                for(var i in parsed_data){
+                    dropdown.appendChild(make_new_alarm(parsed_data[i][0], parsed_data[i][1]));
+                }
+            });
+
+
+
+
+
+
+        }
+    </script>
 
 </body>
 
