@@ -4,6 +4,7 @@
 from . import db
 
 from datetime import datetime
+from flask_sqlalchemy import event
 
 
 def add_and_commit(session, obj):
@@ -81,7 +82,7 @@ class IPMAC(db.Model):
 class Analysis(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     pcap_id = db.Column(db.INTEGER, db.ForeignKey('pcap.id'))
-    total_packet = db.Column(db.INTEGER, nullable=False)
+    total_packet = db.Column(db.INTEGER)
     dns_packet = db.relationship(DNSHost, backref='analysis')
     messenger_packet = db.relationship(Messenger)
     ip_mac = db.relationship(IPMAC, backref='analysis')
@@ -94,6 +95,19 @@ class Analysis(db.Model):
         return "<Analysis %s>" % self.pcap.filename
 
 
+@event.listens_for(Analysis, 'after_insert')
+def add_alarm_start_analysis(mapper, connection, target):
+    p = target.pcap
+    u = p.user
+
+    connection.execute(Alarm.__table__.insert().values(
+        type=1,
+        content="Start Analysis %s" % p.filename),
+        user_id=u.id,
+        analysis_id=target.id
+    )
+
+
 class Pcap(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     fake_filename = db.Column(db.String(50), nullable=False, unique=True)
@@ -104,7 +118,7 @@ class Pcap(db.Model):
     when_analysis_started = db.Column(db.DATETIME)
     when_analysis_finished = db.Column(db.DATETIME)
 
-    analysis = db.relationship(Analysis, backref='pcap')
+    analysis = db.relationship(Analysis, backref='pcap', uselist=False)
 
     user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
 
