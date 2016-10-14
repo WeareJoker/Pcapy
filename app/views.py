@@ -70,7 +70,7 @@ def upload_pcap():
 
         db.session.commit()
 
-        analysis_pcap(filepath, current_user().userid)
+        analysis_pcap(filepath, u.userid)
 
         return fake_filename
 
