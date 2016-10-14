@@ -129,6 +129,10 @@ class Pcap(db.Model):
     def __repr__(self):
         return "<Pcap %s by %s>" % (self.filename, self.user.userid)
 
+    @property
+    def upload_timestamp(self):
+        return str(self.when_upload).split('.')[0]
+
 
 @event.listens_for(Pcap, 'after_insert')
 def add_alarm_upload_pcap(mapper, connection, target):
