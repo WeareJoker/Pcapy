@@ -84,7 +84,7 @@
                                     {% for pcap in user_pcap %}
                                         <a href="#" class="list-group-item">
                                             <span class="badge">{{ pcap.upload_timestamp }}</span>
-                                            {% if pcap.is_done == True %}
+                                            {% if pcap.is_done == False %}
                                             <i class="fa fa-fw fa-clock-o"></i> In Progress analysis:
                                             {% else %}
                                             <i class="fa fa-fw fa-check"></i> Completed analysis:
