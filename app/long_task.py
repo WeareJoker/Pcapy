@@ -1,24 +1,9 @@
+from scapy.all import *
+
 from . import celery
 from . import dpkt
-from .config import *
-from .login_manager import current_user
-from .models import *
-from scapy.all import *
 from .analysis_packet import *
-
-from datetime import datetime
-
-
-@celery.task(bind=True)
-def db_test(self):
-    self.update_state(state='START')
-    import time
-    time.sleep(3)
-    self.update_state(state='Finish')
-    print(self)
-    print(Pcap.query.all())
-    return True
-
+from .login_manager import current_user
 
 packet_info_table = {
     'DNS': analysis_dns,
@@ -27,6 +12,7 @@ packet_info_table = {
 }
 
 
+@celery.task
 def analysis_pcap(pcap_path, user):
     u = current_user(user)
 
@@ -42,7 +28,7 @@ def analysis_pcap(pcap_path, user):
     pcap_reader = dpkt.pcap.Reader(open(pcap_path, 'rb'))
 
     packet_count = 0
-    """
+
     for _, buf in pcap_reader:
         packet_count += 1
         eth = Ether(buf)
@@ -50,7 +36,6 @@ def analysis_pcap(pcap_path, user):
         for proto in packet_info_table.keys():
             if proto in repr(eth):
                 packet_info_table[proto](eth, db_pcap.analysis)
-    """
 
     db_pcap.analysis.total_packet = packet_count
     db_pcap.is_done = True
