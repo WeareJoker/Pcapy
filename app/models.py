@@ -86,11 +86,11 @@ class Analysis(db.Model):
     dns_packet = db.relationship(DNSHost, backref='analysis')
     messenger_packet = db.relationship(Messenger)
     ip_mac = db.relationship(IPMAC, backref='analysis')
-    when_analysis_started = db.Column(db.DATETIME, default=datetime.now())
+    when_analysis_started = db.Column(db.DATETIME, nullable=False)
     when_analysis_finished = db.Column(db.DATETIME)
 
     def __init__(self):
-        pass
+        self.when_analysis_started = datetime.now()
 
     def __repr__(self):
         return "<Analysis %s>" % self.pcap.filename
@@ -114,7 +114,7 @@ class Pcap(db.Model):
     fake_filename = db.Column(db.String(50), nullable=False, unique=True)
     filename = db.Column(db.String(50), nullable=False)
     is_done = db.Column(db.BOOLEAN, nullable=False, default=False)
-    when_upload = db.Column(db.DATETIME, default=datetime.now(), nullable=False)
+    when_upload = db.Column(db.DATETIME, nullable=False)
     analysis = db.relationship(Analysis, backref='pcap', uselist=False)
     user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
 
@@ -122,6 +122,7 @@ class Pcap(db.Model):
         self.fake_filename = fake_filename
         self.filename = real_filename
         self.user = user
+        self.when_upload = datetime.now()
 
     def __repr__(self):
         return "<Pcap %s by %s>" % (self.filename, self.user.userid)
@@ -148,12 +149,13 @@ class Alarm(db.Model):
     type = db.Column(db.String(15), nullable=False)
     content = db.Column(db.String(40), nullable=False)
     simple_content = db.Column(db.String(20), nullable=False)
-    time = db.Column(db.DATETIME, default=datetime.now(), nullable=False)
+    time = db.Column(db.DATETIME, nullable=False)
     user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
 
     def __init__(self, type_id, content, simple_content):
         self.type = type_id
         self.content = content
+        self.time = datetime.now()
         if simple_content is not None:
             self.simple_content = simple_content
 
