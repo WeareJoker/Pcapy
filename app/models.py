@@ -28,16 +28,42 @@ def get_or_create(session, model, **kwargs):
         return instance
 
 
-class KakaoImage(db.Model):
-    __tablename__ = 'kakaoimage'
+class ARP(db.Model):
+    __tablename__ = 'arp'
     id = db.Column(db.INTEGER, primary_key=True)
-    filename = db.Column(db.String(100), nullable=False)
+    op = db.Column(db.INTEGER, nullable=False)
+    hwsrc = db.Column(db.String(20), nullable=False)
+    hwdst = db.Column(db.String(20), nullable=False)
+    psrc = db.Column(db.String(20), nullable=False)
+    pdst = db.Column(db.String(20), nullable=False)
 
-    def __init__(self, filename):
-        self.filename = filename
+    analysis_id = db.Column(db.INTEGER, db.ForeignKey('analysis.id'))
+
+    def __init__(self, op, hwsrc, hwdst, psrc, pdst):
+        self.op = op
+        self.hwsrc = hwsrc
+        self.hwdst = hwdst
+        self.psrc = psrc
+        self.pdst = pdst
 
     def __repr__(self):
-        return "<KakaoImage %d>" % self.id
+        return "<ARP %s>" % self.hwsrc
+
+
+class HTTP(db.Model):
+    id = db.Column(db.INTEGER, primary_key=True)
+    host = db.Column(db.String(150), nullable=False)
+    uri = db.Column(db.String(30), nullable=False)
+    method = db.Column(db.String(20), nullable=False)
+    analysis_id = db.Column(db.INTEGER, db.ForeignKey('analysis.id'))
+
+    def __init__(self, host, uri, method):
+        self.host = host
+        self.uri = uri
+        self.method = method
+
+    def __repr__(self):
+        return "<HTTP %s>" % self.host
 
 
 class DNSHost(db.Model):
@@ -84,9 +110,11 @@ class Analysis(db.Model):
     pcap_id = db.Column(db.INTEGER, db.ForeignKey('pcap.id'))
     total_packet = db.Column(db.INTEGER)
     dns_packet = db.relationship(DNSHost, backref='analysis')
-    messenger_packet = db.relationship(Messenger)
+    messenger_packet = db.relationship(Messenger, backref='analysis')
     ip_mac = db.relationship(IPMAC, backref='analysis')
-    when_analysis_started = db.Column(db.DATETIME, nullable=False)
+    arp = db.relationship(ARP, backref='analysis')
+    http = db.relationship(HTTP, backref='analysis')
+    when_analysis_started = db.Column(db.DATETIME)
     when_analysis_finished = db.Column(db.DATETIME)
 
     def __init__(self):
@@ -134,13 +162,11 @@ class Pcap(db.Model):
 
 @event.listens_for(Pcap, 'after_insert')
 def add_alarm_upload_pcap(mapper, connection, target):
-    u = target.user
-
     connection.execute(Alarm.__table__.insert().values(
         type="Success",
         content="Successfully Upload %s" % target.filename),
         simple_content="File Uploaded",
-        user_id=u.id
+        user_id=target.user.id
     )
 
 
@@ -149,7 +175,7 @@ class Alarm(db.Model):
     type = db.Column(db.String(15), nullable=False)
     content = db.Column(db.String(40), nullable=False)
     simple_content = db.Column(db.String(20), nullable=False)
-    time = db.Column(db.DATETIME, nullable=False)
+    time = db.Column(db.DATETIME)
     user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
 
     def __init__(self, type_id, content, simple_content):
