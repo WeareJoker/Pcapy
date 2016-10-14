@@ -31,16 +31,17 @@ def get_or_create(session, model, **kwargs):
 class ARP(db.Model):
     __tablename__ = 'arp'
     id = db.Column(db.INTEGER, primary_key=True)
-    op = db.Column(db.INTEGER, nullable=False)
-    hwsrc = db.Column(db.String(20), nullable=False)
-    hwdst = db.Column(db.String(20), nullable=False)
-    psrc = db.Column(db.String(20), nullable=False)
-    pdst = db.Column(db.String(20), nullable=False)
+    op = db.Column(db.INTEGER)
+    hwsrc = db.Column(db.String(20))
+    hwdst = db.Column(db.String(20))
+    psrc = db.Column(db.String(20))
+    pdst = db.Column(db.String(20))
 
     analysis_id = db.Column(db.INTEGER, db.ForeignKey('analysis.id'))
 
-    def __init__(self, op, hwsrc, hwdst, psrc, pdst):
-        self.op = op
+    def __init__(self, hwsrc, hwdst, psrc, pdst, op=None):
+        if op is not None:
+            self.op = op
         self.hwsrc = hwsrc
         self.hwdst = hwdst
         self.psrc = psrc
