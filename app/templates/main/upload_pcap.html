@@ -39,6 +39,7 @@
 
                     success: function(response) {
                         // window.location.replace('/' + response);
+                        window.location.reload(true);
                     }
                 });
                 return false;
@@ -80,14 +81,17 @@
                             </div>
                             <div class="panel-body">
                                 <div class="list-group">
-                                    <a href="#" class="list-group-item">
-                                        <span class="badge">just now</span>
-                                        <i class="fa fa-fw fa-clock-o"></i> In Progress analysis:  <strong>test.pcap</strong>
-                                    </a>
-                                    <a href="#" class="list-group-item">
-                                        <span class="badge">2 hours ago</span>
-                                        <i class="fa fa-fw fa-check"></i> Completed analysis: <strong>finish.pcap</strong>
-                                    </a>
+                                    {% for pcap in user_pcap %}
+                                        <a href="#" class="list-group-item">
+                                            <span class="badge">{{ pcap.upload_timestamp }}</span>
+                                            {% if pcap.is_done == True %}
+                                            <i class="fa fa-fw fa-clock-o"></i> In Progress analysis:
+                                            {% else %}
+                                            <i class="fa fa-fw fa-check"></i> Completed analysis:
+                                            {% endif %}
+                                            <strong>{{ pcap.filename }}</strong>
+                                        </a>
+                                    {% endfor %}
                                 </div>
                                 <div class="text-right">
                                     <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
