@@ -114,11 +114,8 @@ class Pcap(db.Model):
     fake_filename = db.Column(db.String(50), nullable=False, unique=True)
     filename = db.Column(db.String(50), nullable=False)
     is_done = db.Column(db.BOOLEAN, nullable=False, default=False)
-
     when_upload = db.Column(db.DATETIME, default=datetime.now(), nullable=False)
-
     analysis = db.relationship(Analysis, backref='pcap', uselist=False)
-
     user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
 
     def __init__(self, fake_filename, real_filename, user):
@@ -168,7 +165,7 @@ class User(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     userid = db.Column(db.String(30), nullable=False, unique=True)
     userpw = db.Column(db.String(30), nullable=False)
-    pcap = db.relationship(Pcap, backref='user')
+    pcap = db.relationship(Pcap, backref='user', order_by='Pcap.when_upload')
     alarm = db.relationship(Alarm, backref='user')
 
     def __init__(self, userid, userpw):
