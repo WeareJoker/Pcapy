@@ -35,13 +35,19 @@ def streamed_response():
 
 @app.route('/')
 def index():
-    return render_template('main/index.html')
+    return redirect(url_for('upload_pcap'))
 
 
 @app.route('/result/<string:pcapname>')
 @login_required
 def result(pcapname):
-    return render_template('main/index.html')
+    u = current_user()
+    p = Pcap.query.filter_by(fake_filename=pcapname, user=u).first()
+    if p is None:
+        return "<script>alert('잘못된 접근입니다!');history.go(-1);</script>"
+    else:
+        return render_template('main/index.html',
+                               pcap=p)
 
 
 @app.route('/pcap/upload', methods=['GET', 'POST'])
@@ -70,7 +76,7 @@ def upload_pcap():
 
         db.session.commit()
 
-        analysis_pcap(filepath, u.userid)
+        analysis_pcap.delay(filepath, u.userid)
 
         return fake_filename
 
