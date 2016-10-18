@@ -15,15 +15,27 @@ def analysis_http(eth, analysis):
         pass
     else:
         try:
-            data = eth[3].load.decode().split()
+            load_data = eth[3].load
         except UnicodeDecodeError:
             raw_data = eth[3].load
-            data = raw_data[:raw_data.find(b'\r\n\r\n')].decode().split()
+            load_data = raw_data[:raw_data.find(b'\r\n\r\n')]
+        try:
+            data = load_data.decode().split('\r\n')
+            method, uri, _ = data[0].split()
+        except ValueError:
+            return
+        except UnicodeDecodeError:
+            return
+
+        host = data[1].split('Host: ')[-1]
+        # matching = [s for s in data if "Cookie" in s]
+        # if len(matching) != 0:
+        #     matching[0].split()
+
         if data[0] == 'HTTP/1.1':
             pass
         else:
-            host = data[data.index('Host:') + 1]
-            h = HTTP(host, data[1], data[0])
+            h = HTTP(host, uri, method)
             db.session.add(h)
 
             analysis.http.append(h)
