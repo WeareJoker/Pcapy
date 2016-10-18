@@ -143,6 +143,7 @@ class Pcap(db.Model):
     fake_filename = db.Column(db.String(50), nullable=False, unique=True)
     filename = db.Column(db.String(50), nullable=False)
     is_done = db.Column(db.Integer, nullable=False, default=0)
+    errorinfo = db.Column(db.TEXT)
     when_upload = db.Column(db.DATETIME, nullable=False)
     analysis = db.relationship(Analysis, backref='pcap', uselist=False)
     user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
