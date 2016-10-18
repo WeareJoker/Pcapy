@@ -69,16 +69,16 @@ $(function() {
         element: 'morris-donut-chart',
         data: [{
             label: "naver.com",
-            value: 122
+            value: 4
         }, {
             label: "google.com",
-            value: 340
+            value: 2
         }, {
             label: "github.com",
-            value: 210
+            value: 7
         }, {
             label: "trello.com",
-            value: 312
+            value: 1
         }],
         resize: true
     });
