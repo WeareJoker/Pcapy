@@ -47,7 +47,8 @@ def result(pcapname):
         return "<script>alert('잘못된 접근입니다!');history.go(-1);</script>"
     else:
         return render_template('main/index.html',
-                               pcap=p)
+                               pcap=p,
+                               user_pcap=u.pcap)
 
 
 @app.route('/pcap/upload', methods=['GET', 'POST'])
