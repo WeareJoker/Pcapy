@@ -20,7 +20,7 @@ def streamed_response():
 
 @main_blueprint.route('/')
 def index():
-    return redirect(url_for('upload_pcap'))
+    return redirect(url_for('pcap.upload_pcap'))
 
 
 from .static_view import *
