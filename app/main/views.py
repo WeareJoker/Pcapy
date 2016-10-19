@@ -23,3 +23,4 @@ def index():
     return redirect(url_for('upload_pcap'))
 
 
+from .static_view import *
