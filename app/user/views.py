@@ -8,7 +8,7 @@ from app.models import *
 from .login_manager import *
 
 
-@user_blueprint.route('/user/account', methods=['GET', 'POST'])
+@user_blueprint.route('/account', methods=['GET', 'POST'])
 @logout_required
 def account():
     if request.method == 'GET':
@@ -36,7 +36,7 @@ def account():
         return redirect(url_for('user.account', msg=3))
 
 
-@user_blueprint.route('/user/alarm', methods=['GET'])
+@user_blueprint.route('/alarm', methods=['GET'])
 @login_required
 def alarm():
     u = current_user()
@@ -50,7 +50,7 @@ def alarm():
     return json.dumps(data)
 
 
-@user_blueprint.route('/user/login', methods=['POST'])
+@user_blueprint.route('/login', methods=['POST'])
 @logout_required
 def login():
     data = request.form
@@ -66,7 +66,7 @@ def login():
         logout_user()
 
 
-@user_blueprint.route('/user/logout')
+@user_blueprint.route('/logout')
 @login_required
 def logout():
     logout_user()
