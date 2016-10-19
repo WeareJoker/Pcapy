@@ -3,10 +3,10 @@ import time
 from flask import stream_with_context, request, Response
 
 from app.user.login_manager import *
-from app import app
+from . import main_blueprint
 
 
-@app.route('/stream')
+@main_blueprint.route('/stream')
 def streamed_response():
     def generate():
         yield 'Hello '
@@ -18,7 +18,7 @@ def streamed_response():
     return Response(stream_with_context(generate()))
 
 
-@app.route('/')
+@main_blueprint.route('/')
 def index():
     return redirect(url_for('upload_pcap'))
 
