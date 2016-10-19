@@ -3,8 +3,8 @@ import os
 from flask import send_file
 from flask import send_from_directory
 
-from .config import PROJECT_ROOT
-from . import app
+from app.config import PROJECT_ROOT
+from app import app
 
 
 @app.route('/css/<path:filename>')
