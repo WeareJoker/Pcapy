@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import session, redirect, url_for
-from .models import User
+from app.models import User
 
 
 def login_required(func):

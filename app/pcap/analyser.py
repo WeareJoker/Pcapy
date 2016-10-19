@@ -1,9 +1,9 @@
 from scapy.all import *
 
-from . import celery
-from . import dpkt
-from .analysis_packet import *
-from .login_manager import current_user
+from app.user.login_manager import current_user
+from app import celery
+from app import dpkt
+from .protocol_handler import *
 
 packet_info_table = {
     'DNS': analysis_dns,
