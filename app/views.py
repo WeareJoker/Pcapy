@@ -51,6 +51,13 @@ def result(pcapname):
                                user_pcap=u.pcap)
 
 
+def make_file_info(filename):
+    file_type = filename.split('.')[-1]
+    fake_filename = randomkey(len(filename)) + '.' + file_type
+    filepath = os.path.join(PCAP_FILE_PATH, fake_filename)
+    return fake_filename, filepath
+
+
 @app.route('/pcap/upload', methods=['GET', 'POST'])
 @login_required
 def upload_pcap():
@@ -62,24 +69,20 @@ def upload_pcap():
 
     elif request.method == 'POST':
         pcap_file = request.files['pcap']
+        filename, filepath = make_file_info(pcap_file.filename)
 
-        filetype = pcap_file.filename.split('.')[-1]
-        fake_filename = randomkey(len(pcap_file.filename)) + '.' + filetype
-        filepath = os.path.join(PCAP_FILE_PATH, fake_filename)
         pcap_file.save(filepath)
         u = current_user()
 
-        p = Pcap(fake_filename, pcap_file.filename, u)
+        p = Pcap(filename, pcap_file.filename, u)
 
         add_and_commit(db.session, p)
-
         u.pcap.append(p)
-
         db.session.commit()
 
         analysis_pcap.delay(filepath, u.userid)
 
-        return fake_filename
+        return filename
 
 
 @app.route('/user/account', methods=['GET', 'POST'])
