@@ -64,7 +64,7 @@
                         </h1>
                         <ol class="breadcrumb">
                             <li>
-                                <i class="fa fa-dashboard"></i>  <a href="{{ url_for('index') }}">Dashboard</a>
+                                <i class="fa fa-dashboard"></i>  <a href="{{ url_for('main.index') }}">Dashboard</a>
                             </li>
                             <li class="active">
                                 <i class="fa fa-edit"></i> Upload
@@ -82,7 +82,7 @@
                             <div class="panel-body">
                                 <div class="list-group">
                                     {% for pcap in user_pcap %}
-                                        <a href="{{ url_for('result', pcap_name=pcap.fake_filename) }}" class="list-group-item">
+                                        <a href="{{ url_for('pcap.result', pcap_name=pcap.fake_filename) }}" class="list-group-item">
                                             <span class="badge">{{ pcap.upload_timestamp }}</span>
                                             {% if pcap.is_done == 0 %}
                                                 <i class="fa fa-fw fa-clock-o"></i> In Progress analysis:
