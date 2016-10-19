@@ -21,7 +21,7 @@ def account():
                                 '2': '로그인이 필요합니다.',
                                 '3': '회원가입을 성공하였습니다.'
                             }.get(msg))
-        return render_template('main/login.html',
+        return render_template('user/login.html',
                                alert_message_list=msg_list)
 
     if request.method == 'POST':

@@ -32,7 +32,7 @@ def make_file_info(filename):
 def upload_pcap():
     if request.method == 'GET':
         u = current_user()
-        return render_template('main/upload_pcap.html',
+        return render_template('pcap/upload_pcap.html',
                                pcap_id=randomkey(30),
                                user_pcap=u.pcap)
 
