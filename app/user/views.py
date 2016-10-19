@@ -3,12 +3,12 @@ import json
 from flask import request, render_template
 from sqlalchemy.exc import IntegrityError
 
-from app import app
+from . import user_blueprint
 from app.models import *
 from .login_manager import *
 
 
-@app.route('/user/account', methods=['GET', 'POST'])
+@user_blueprint.route('/user/account', methods=['GET', 'POST'])
 @logout_required
 def account():
     if request.method == 'GET':
@@ -36,7 +36,7 @@ def account():
         return redirect(url_for('account', msg=3))
 
 
-@app.route('/user/alarm', methods=['GET'])
+@user_blueprint.route('/user/alarm', methods=['GET'])
 @login_required
 def alarm():
     u = current_user()
@@ -50,7 +50,7 @@ def alarm():
     return json.dumps(data)
 
 
-@app.route('/user/login', methods=['POST'])
+@user_blueprint.route('/user/login', methods=['POST'])
 @logout_required
 def login():
     data = request.form
@@ -66,7 +66,7 @@ def login():
         logout_user()
 
 
-@app.route('/user/logout')
+@user_blueprint.route('/user/logout')
 @login_required
 def logout():
     logout_user()
