@@ -1,13 +1,13 @@
 import os
 from app.config import randomkey, PCAP_FILE_PATH
 from flask import render_template, request
-from app import app
+from . import pcap_blueprint
 from app.user.login_manager import *
 from app.models import *
 from .analyser import analysis_pcap
 
 
-@app.route('/result/<pcap_name>')
+@pcap_blueprint.route('/result/<pcap_name>')
 @login_required
 def result(pcap_name):
     u = current_user()
@@ -27,7 +27,7 @@ def make_file_info(filename):
     return fake_filename, filepath
 
 
-@app.route('/upload', methods=['GET', 'POST'])
+@pcap_blueprint.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload_pcap():
     if request.method == 'GET':
