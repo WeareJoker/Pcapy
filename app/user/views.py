@@ -31,9 +31,9 @@ def account():
         try:
             add_and_commit(db.session, u)
         except IntegrityError:
-            return redirect(url_for('account', msg=1))
+            return redirect(url_for('user.account', msg=1))
 
-        return redirect(url_for('account', msg=3))
+        return redirect(url_for('user.account', msg=3))
 
 
 @user_blueprint.route('/user/alarm', methods=['GET'])
@@ -57,10 +57,10 @@ def login():
     if request.method == 'POST':
         u = User.query.filter_by(userid=data['userid'], userpw=data['userpw']).first()
         if u is None:
-            return redirect(url_for('account', msg=1))
+            return redirect(url_for('user.account', msg=1))
         else:
             login_user(u.userid)
-            return redirect(url_for('index'))
+            return redirect(url_for('main.index'))
 
     elif request.method == 'DELETE':
         logout_user()
@@ -70,4 +70,4 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('account'))
+    return redirect(url_for('user.account'))

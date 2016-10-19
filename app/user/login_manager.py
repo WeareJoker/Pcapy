@@ -14,7 +14,7 @@ def login_required(func):
             if session['login'] is True:
                 return func(*args, **kwargs)
             else:
-                return redirect(url_for('account', msg=2))
+                return redirect(url_for('user.account', msg=2))
 
     return check_user_login
 
@@ -30,7 +30,7 @@ def logout_required(func):
             if session['login'] is False:
                 return func(*args, **kwargs)
             else:
-                return redirect(url_for('index'))
+                return redirect(url_for('main.index'))
 
     return check_user_logout
 
