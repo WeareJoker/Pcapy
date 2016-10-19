@@ -27,7 +27,7 @@ def analysis_pcap(pcap_path, user):
     try:
         pcap_reader = dpkt.pcap.Reader(open(pcap_path, 'rb'))
     except ValueError:
-        db_pcap.is_done = 3
+        db_pcap.is_done = 2
         db_pcap.error_info = "Invalid file. Is it right pcap file?"
         u.alarm.append(Alarm("Error", "Error Analysis %s" % db_pcap.fake_filename, simple_content="Error Analysis"))
     else:

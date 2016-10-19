@@ -84,10 +84,12 @@
                                     {% for pcap in user_pcap %}
                                         <a href="{{ url_for('result', pcapname=pcap.fake_filename) }}" class="list-group-item">
                                             <span class="badge">{{ pcap.upload_timestamp }}</span>
-                                            {% if pcap.is_done == False %}
-                                            <i class="fa fa-fw fa-clock-o"></i> In Progress analysis:
-                                            {% else %}
-                                            <i class="fa fa-fw fa-check"></i> Completed analysis:
+                                            {% if pcap.is_done == 0 %}
+                                                <i class="fa fa-fw fa-clock-o"></i> In Progress analysis:
+                                            {% elif pcap.is_done == 1 %}
+                                                <i class="fa fa-fw fa-check"></i> Completed analysis:
+                                            {% elif pcap.is_done == 2 %}
+                                                <i class="fa fa-fw fa-warning"></i> Error analysis:
                                             {% endif %}
                                             <strong>{{ pcap.filename }}</strong>
                                         </a>
