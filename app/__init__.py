@@ -60,4 +60,4 @@ manager.add_command('db', MigrateCommand)
 
 migrate = Migrate(app, db)
 
-from .views import *
+
