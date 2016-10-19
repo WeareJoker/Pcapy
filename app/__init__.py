@@ -11,6 +11,13 @@ app = Flask(__name__)
 db = SQLAlchemy(app)
 app.config.from_pyfile('config.py')
 
+try:
+    import MySQLdb
+except ImportError:
+    import pymysql
+
+    pymysql.install_as_MySQLdb()
+
 
 def make_celery(app):
     c = Celery(app.import_name, backend=app.config['CELERY_BACKEND'],
