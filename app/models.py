@@ -86,32 +86,6 @@ class DNSHost(db.Model):
         return "<DNSHost %s>" % self.host
 
 
-class Messenger(db.Model):
-    id = db.Column(db.INTEGER, primary_key=True)
-    url = db.Column(db.String(200), nullable=False)
-    analysis_id = db.Column(db.INTEGER, db.ForeignKey('analysis.id'))
-
-    def __init__(self, url):
-        self.url = url
-
-    def __repr__(self):
-        return "<Messenger %d>" % self.id
-
-
-class IPMAC(db.Model):
-    id = db.Column(db.INTEGER, primary_key=True)
-    ip = db.Column(db.String(20), nullable=False)
-    mac = db.Column(db.String(20), nullable=False)
-    analysis_id = db.Column(db.INTEGER, db.ForeignKey('analysis.id'))
-
-    def __init__(self, ip, mac):
-        self.ip = ip
-        self.mac = mac
-
-    def __repr__(self):
-        return "<IPMAC %s : %s>" % (self.ip, self.mac)
-
-
 class Analysis(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     pcap_id = db.Column(db.INTEGER, db.ForeignKey('pcap.id'))
