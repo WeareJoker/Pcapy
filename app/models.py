@@ -24,13 +24,13 @@ class CustomGroupBy:
 
         if time_diff.hour > 14:
             # this is hour type
-            return self.hour
+            return self.__hour
         elif time_diff.minute > 6:
             # this is minute type
-            return self.minute
+            return self.__minute
         else:
             # this is second type
-            return self.second
+            return self.__second
 
     def __hour(self):
         self.time_list = list(set(map(lambda x: x.timestamp.hour, self.query_data)))
