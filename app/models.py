@@ -121,9 +121,9 @@ class Analysis(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     pcap_id = db.Column(db.INTEGER, db.ForeignKey('pcap.id'))
     total_packet = db.Column(db.INTEGER)
-    dns_packet = db.relationship(DNSHost, backref='analysis')
-    arp = db.relationship(ARP, backref='analysis')
-    http = db.relationship(HTTP, backref='analysis')
+    dns_packet = db.relationship(DNSHost, backref='analysis', order_by=True)
+    arp = db.relationship(ARP, backref='analysis', order_by=True)
+    http = db.relationship(HTTP, backref='analysis', order_by=True)
     when_analysis_started = db.Column(db.DATETIME)
     when_analysis_finished = db.Column(db.DATETIME)
 
