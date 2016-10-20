@@ -40,7 +40,7 @@
                                         <i class="fa fa-sellsy fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge">26</div>
+                                        <div class="huge">{{ pcap.analysis.total_packet }}</div>
                                         <div>Total Packets</div>
                                     </div>
                                 </div>
@@ -62,7 +62,7 @@
                                         <i class="fa fa-tasks fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge">12</div>
+                                        <div class="huge">{{ pcap.analysis.dns_packet | length }}</div>
                                         <div>DNS Packets</div>
                                     </div>
                                 </div>
