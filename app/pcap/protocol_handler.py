@@ -1,3 +1,5 @@
+import validators
+
 from app.models import *
 
 
@@ -29,6 +31,10 @@ def analysis_http(eth, analysis):
         # matching = [s for s in data if "Cookie" in s]
         # if len(matching) != 0:
         #     matching[0].split()
+        # check valid URL
+
+        if validators.domain(host) is not True:
+            return
 
         if data[0] == 'HTTP/1.1':
             pass
