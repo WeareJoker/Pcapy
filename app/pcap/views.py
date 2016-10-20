@@ -6,6 +6,8 @@ from app.user.login_manager import *
 from app.models import *
 from .analyser import analysis_pcap
 
+from sqlalchemy import func
+
 
 @pcap_blueprint.route('/result/<pcap_name>')
 @login_required
@@ -15,8 +17,11 @@ def result(pcap_name):
     except NoInfoException:
         return "<script>alert('잘못된 접근입니다!');history.go(-1);</script>"
     else:
+        dns_data = db.session.query(DNSHost.host, func.count(DNSHost.host)).filter_by(
+            analysis_id=p.analysis.id).group_by(DNSHost.host).all()
         return render_template('pcap/index.html',
-                               pcap=p)
+                               pcap=p,
+                               dns_data=dns_data)
 
 
 @pcap_blueprint.route('/result_data/<pcap_name>')
