@@ -14,31 +14,31 @@ def analysis_dns(eth, analysis):
 
 def analysis_http(eth, analysis):
     if "M-SEARCH" in repr(eth[3]) or b"200 OK" in eth[3].load:
-        pass
-    else:
-        try:
-            load_data = eth[3].load
-        except UnicodeDecodeError:
-            raw_data = eth[3].load
-            load_data = raw_data[:raw_data.find(b'\r\n\r\n')]
-        try:
-            data = load_data.decode().split('\r\n')
-            method, uri, _ = data[0].split()
-        except (ValueError, UnicodeDecodeError) as _:
-            return
+        return
 
-        host = data[1].split('Host: ')[-1]
+    try:
+        load_data = eth[3].load
+    except UnicodeDecodeError:
+        raw_data = eth[3].load
+        load_data = raw_data[:raw_data.find(b'\r\n\r\n')]
+    try:
+        data = load_data.decode().split('\r\n')
+        method, uri, _ = data[0].split()
+    except (ValueError, UnicodeDecodeError) as _:
+        return
 
-        # check valid URL
-        if validators.domain(host) is not True or data[0] == 'HTTP/1.1':
-            return
+    host = data[1].split('Host: ')[-1]
 
-        h = HTTP(host, uri, method)
-        db.session.add(h)
+    # check valid URL
+    if validators.domain(host) is not True or data[0] == 'HTTP/1.1':
+        return
 
-        analysis.http.append(h)
+    h = HTTP(host, uri, method)
+    db.session.add(h)
 
-        db.session.commit()
+    analysis.http.append(h)
+
+    db.session.commit()
 
 
 def analysis_arp(eth, analysis):
