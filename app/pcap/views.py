@@ -26,7 +26,7 @@ def result(pcap_name):
 def result_data(pcap_name):
     u = current_user()
     p = Pcap.query.filter_by(user=u, fake_filename=pcap_name).first_or_404()
-    return render_template('pcap/morris-data.js',
+    return render_template('pcap/result-data.js',
                            pcap=p,
                            user=u)
 
