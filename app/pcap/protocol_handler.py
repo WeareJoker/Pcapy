@@ -3,9 +3,9 @@ import validators
 from app.models import *
 
 
-def analysis_dns(eth, analysis):
+def analysis_dns(eth, analysis, pkt_time):
     hostname = eth[3].qd.qname.decode()
-    d = DNSHost(hostname)
+    d = DNSHost(hostname, pkt_time)
     db.session.add(d)
     analysis.dns_packet.append(d)
 
@@ -15,7 +15,7 @@ def analysis_dns(eth, analysis):
 KAKAO_URL = ["th-m4.talk.kakao.com", "th-p.talk.kakao.co.kr", "p.talk.kakao.co.kr"]
 
 
-def analysis_http(eth, analysis):
+def analysis_http(eth, analysis, pkt_time):
     if "M-SEARCH" in repr(eth[3]) or b"200 OK" in eth[3].load:
         return
 
@@ -37,7 +37,7 @@ def analysis_http(eth, analysis):
             or data[0] == 'HTTP/1.1':
         return
 
-    h = HTTP(host, uri, method, kakao=(host in KAKAO_URL))
+    h = HTTP(host, uri, method, pkt_time, kakao=(host in KAKAO_URL))
     db.session.add(h)
 
     analysis.http.append(h)
@@ -45,11 +45,11 @@ def analysis_http(eth, analysis):
     db.session.commit()
 
 
-def analysis_arp(eth, analysis):
+def analysis_arp(eth, analysis, pkt_time):
     arp = eth[1]
 
     try:
-        a = ARP(arp.hwsrc, arp.hwdst, arp.psrc, arp.pdst, arp.op)
+        a = ARP(arp.hwsrc, arp.hwdst, arp.psrc, arp.pdst, pkt_time, arp.op)
     except AttributeError:
         pass
     else:
