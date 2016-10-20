@@ -15,6 +15,7 @@ class CustomGroupBy:
     def __init__(self, query_data):
         self.query_data = query_data
         self.time_unit_func = self.__check_time_unit()
+        self.time_list = None
         self.pkt_data = self.time_unit_func()
 
     def __check_time_unit(self):
@@ -33,16 +34,16 @@ class CustomGroupBy:
             return self.__second
 
     def __hour(self):
-        time_list = list(set(map(lambda x: x.timestamp.hour, self.query_data)))
-        return [[y for y in self.query_data if y.timestamp.hour == x] for x in time_list]
+        self.time_list = list(set(map(lambda x: x.timestamp.hour, self.query_data)))
+        return [[y for y in self.query_data if y.timestamp.hour == x] for x in self.time_list]
 
     def __minute(self):
-        time_list = list(set(map(lambda x: x.timestamp.minute, self.query_data)))
-        return [[y for y in self.query_data if y.timestamp.minute == x] for x in time_list]
+        self.time_list = list(set(map(lambda x: x.timestamp.minute, self.query_data)))
+        return [[y for y in self.query_data if y.timestamp.minute == x] for x in self.time_list]
 
     def __second(self):
-        time_list = list(set(map(lambda x: x.timestamp.second, self.query_data)))
-        return [[y for y in self.query_data if y.timestamp.second == x] for x in time_list]
+        self.time_list = list(set(map(lambda x: x.timestamp.second, self.query_data)))
+        return [[y for y in self.query_data if y.timestamp.second == x] for x in self.time_list]
 
 
 def add_and_commit(session, obj):
