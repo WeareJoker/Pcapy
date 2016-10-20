@@ -14,9 +14,9 @@ class NoInfoException(Exception):
 class CustomGroupBy:
     def __init__(self, query_data):
         self.query_data = query_data
-        self.time_unit = self.check_time_unit()
+        self.time_unit = self.__check_time_unit()
 
-    def check_time_unit(self):
+    def __check_time_unit(self):
         time_diff = datetime.fromtimestamp(
             self.query_data[-1].timestamp.timestamp() - self.query_data[0].timestamp.timestamp()
         )
