@@ -44,6 +44,10 @@ class CustomGroupBy:
         self.time_list = list(set(map(lambda x: x.timestamp.second, self.query_data)))
         return [len([y for y in self.query_data if y.timestamp.second == x]) for x in time_list]
 
+    @property
+    def pkt_data(self):
+        return self.time_list, self.time_unit()
+
 
 def add_and_commit(session, obj):
     session.add(obj)
