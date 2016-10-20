@@ -171,6 +171,15 @@ class Pcap(db.Model):
     def upload_timestamp(self):
         return str(self.when_upload).split('.')[0]
 
+    @staticmethod
+    def find_pcap(*args, **kwargs):
+        # return Pcap.query.filter_by(*args, **kwargs).first_or_404()
+        p = Pcap.query.filter_by(*args, **kwargs).first()
+        if p is None:
+            raise NoInfoException("No packet info!")
+        else:
+            return p
+
 
 @event.listens_for(Pcap, 'after_insert')
 def add_alarm_upload_pcap(mapper, connection, target):
