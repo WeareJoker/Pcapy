@@ -55,13 +55,15 @@ class HTTP(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     host = db.Column(db.String(150), nullable=False)
     uri = db.Column(db.String(30), nullable=False)
+    kakao = db.Column(db.BOOLEAN, default=False, nullable=False)
     method = db.Column(db.String(20), nullable=False)
     analysis_id = db.Column(db.INTEGER, db.ForeignKey('analysis.id'))
 
-    def __init__(self, host, uri, method):
+    def __init__(self, host, uri, method, kakao=False):
         self.host = host
         self.uri = uri
         self.method = method
+        self.kakao = kakao
 
     def __repr__(self):
         return "<HTTP %s>" % self.host
