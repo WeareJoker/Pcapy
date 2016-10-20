@@ -10,25 +10,21 @@ from .analyser import analysis_pcap
 @pcap_blueprint.route('/result/<pcap_name>')
 @login_required
 def result(pcap_name):
-    u = current_user()
     try:
-        p = Pcap.find_pcap(user=u, fake_filename=pcap_name)
+        p = Pcap.find_pcap(user=current_user(), fake_filename=pcap_name)
     except NoInfoException:
         return "<script>alert('잘못된 접근입니다!');history.go(-1);</script>"
     else:
         return render_template('pcap/index.html',
-                               pcap=p,
-                               user_pcap=u.pcap)
+                               pcap=p)
 
 
 @pcap_blueprint.route('/result_data/<pcap_name>')
 @login_required
 def result_data(pcap_name):
-    u = current_user()
-    p = Pcap.query.filter_by(user=u, fake_filename=pcap_name).first_or_404()
+    p = Pcap.query.filter_by(user=current_user(), fake_filename=pcap_name).first_or_404()
     return render_template('pcap/result-data.js',
-                           pcap=p,
-                           user=u)
+                           pcap=p)
 
 
 def make_file_info(filename):
