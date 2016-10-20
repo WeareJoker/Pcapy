@@ -14,6 +14,7 @@ class NoInfoException(Exception):
 class CustomGroupBy:
     def __init__(self, query_data):
         self.query_data = query_data
+        self.time_list = None
         self.time_unit = self.__check_time_unit()
 
     def __check_time_unit(self):
@@ -32,15 +33,15 @@ class CustomGroupBy:
             return self.second
 
     def __hour(self):
-        time_list = list(set(map(lambda x: x.timestamp.hour, self.query_data)))
+        self.time_list = list(set(map(lambda x: x.timestamp.hour, self.query_data)))
         return [len([y for y in self.query_data if y.timestamp.hour == x]) for x in time_list]
 
     def __minute(self):
-        time_list = list(set(map(lambda x: x.timestamp.minute, self.query_data)))
+        self.time_list = list(set(map(lambda x: x.timestamp.minute, self.query_data)))
         return [len([y for y in self.query_data if y.timestamp.minute == x.minute]) for x in time_list]
 
     def __second(self):
-        time_list = list(set(map(lambda x: x.timestamp.second, self.query_data)))
+        self.time_list = list(set(map(lambda x: x.timestamp.second, self.query_data)))
         return [len([y for y in self.query_data if y.timestamp.second == x]) for x in time_list]
 
 
