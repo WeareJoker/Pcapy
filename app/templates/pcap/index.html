@@ -244,5 +244,5 @@
 
 {% block footer %}
     <!-- <script src="/js/plugins/morris/morris-data.js"></script> -->
-    <script src="{{ url_for('pcap.result_data', pcap_name=pcap.name) }}"></script>
+    <script src="{{ url_for('pcap.result_data', pcap_name=pcap.fake_filename) }}"></script>
 {% endblock %}
