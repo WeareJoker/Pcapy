@@ -24,14 +24,6 @@ def result(pcap_name):
                                dns_data=dns_data)
 
 
-@pcap_blueprint.route('/result_data/<pcap_name>')
-@login_required
-def result_data(pcap_name):
-    p = Pcap.query.filter_by(user=current_user(), fake_filename=pcap_name).first_or_404()
-    return render_template('pcap/result-data.js',
-                           pcap=p)
-
-
 def make_file_info(filename):
     file_type = filename.split('.')[-1]
     fake_filename = randomkey(len(filename)) + '.' + file_type
