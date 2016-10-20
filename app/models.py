@@ -91,8 +91,6 @@ class Analysis(db.Model):
     pcap_id = db.Column(db.INTEGER, db.ForeignKey('pcap.id'))
     total_packet = db.Column(db.INTEGER)
     dns_packet = db.relationship(DNSHost, backref='analysis')
-    messenger_packet = db.relationship(Messenger, backref='analysis')
-    ip_mac = db.relationship(IPMAC, backref='analysis')
     arp = db.relationship(ARP, backref='analysis')
     http = db.relationship(HTTP, backref='analysis')
     when_analysis_started = db.Column(db.DATETIME)
