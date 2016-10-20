@@ -12,23 +12,23 @@ class NoInfoException(Exception):
 
 
 def group_by_hour(query_data):
-    return [[y for y in query_data if y.timestamp.hour == x] for x in
-            set(map(lambda x: x.timestamp.hour, query_data))]
+    time_list = set(map(lambda x: x.timestamp.hour, query_data))
+    return time_list, [[y for y in query_data if y.timestamp.hour == x] for x in time_list]
 
 
 def group_by_minute(query_data):
-    return [[y for y in query_data if y.timestamp.minute == x] for x in
-            set(map(lambda x: x.timestamp.minute, query_data))]
+    time_list = set(map(lambda x: x.timestamp.minute, query_data))
+    return time_list, [[y for y in query_data if y.timestamp.minute == x] for x in time_list]
 
 
 def group_by_second(query_data):
-    return [[y for y in query_data if y.timestamp.second == x] for x in
-            set(map(lambda x: x.timestamp.second, query_data))]
+    time_list = set(map(lambda x: x.timestamp.second, query_data))
+    return time_list, [[y for y in query_data if y.timestamp.second == x] for x in time_list]
 
 
 def group_by_microsecond(query_data):
-    return [[y for y in query_data if y.timestamp.microsecond == x] for x in
-            set(map(lambda x: x.timestamp.microsecond, query_data))]
+    time_list = set(map(lambda x: x.timestamp.microsecond, query_data))
+    return time_list, [[y for y in query_data if y.timestamp.microsecond == x] for x in time_list]
 
 
 def add_and_commit(session, obj):
