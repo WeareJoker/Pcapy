@@ -11,6 +11,26 @@ class NoInfoException(Exception):
     pass
 
 
+def group_by_hour(query_data):
+    return [[y for y in query_data if y.timestamp.hour == x] for x in
+            set(map(lambda x: x.timestamp.hour, query_data))]
+
+
+def group_by_minute(query_data):
+    return [[y for y in query_data if y.timestamp.minute == x] for x in
+            set(map(lambda x: x.timestamp.minute, query_data))]
+
+
+def group_by_second(query_data):
+    return [[y for y in query_data if y.timestamp.second == x] for x in
+            set(map(lambda x: x.timestamp.second, query_data))]
+
+
+def group_by_microsecond(query_data):
+    return [[y for y in query_data if y.timestamp.microsecond == x] for x in
+            set(map(lambda x: x.timestamp.microsecond, query_data))]
+
+
 def add_and_commit(session, obj):
     session.add(obj)
     try:
@@ -74,7 +94,7 @@ class HTTP(db.Model):
         self.timestamp = timestamp
 
     def __repr__(self):
-        return "<HTTP %s>" % self.host
+        return "<HTTP %s %s>" % (self.host, str(self.timestamp))
 
 
 class DNSHost(db.Model):
@@ -201,4 +221,3 @@ class User(db.Model):
 
     def __repr__(self):
         return "<User %s>" % self.userid
-# db.session.query(HTTP).filter_by(analysis_id=p.analysis.id).group_by(util.MINUTE(HTTP.analysis)).all()
