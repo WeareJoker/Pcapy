@@ -12,6 +12,9 @@ def analysis_dns(eth, analysis):
     db.session.commit()
 
 
+KAKAO_URL = ["th-m4.talk.kakao.com", "th-p.talk.kakao.co.kr", "p.talk.kakao.co.kr"]
+
+
 def analysis_http(eth, analysis):
     if "M-SEARCH" in repr(eth[3]) or b"200 OK" in eth[3].load:
         return
@@ -34,7 +37,7 @@ def analysis_http(eth, analysis):
             or data[0] == 'HTTP/1.1':
         return
 
-    h = HTTP(host, uri, method)
+    h = HTTP(host, uri, method, kakao=(host in KAKAO_URL))
     db.session.add(h)
 
     analysis.http.append(h)
