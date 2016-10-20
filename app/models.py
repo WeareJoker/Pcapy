@@ -31,18 +31,15 @@ class CustomGroupBy:
             # this is second type
             return self.second
 
-    @property
-    def hour(self):
+    def __hour(self):
         time_list = list(set(map(lambda x: x.timestamp.hour, self.query_data)))
         return [len([y for y in self.query_data if y.timestamp.hour == x]) for x in time_list]
 
-    @property
-    def minute(self):
+    def __minute(self):
         time_list = list(set(map(lambda x: x.timestamp.minute, self.query_data)))
         return [len([y for y in self.query_data if y.timestamp.minute == x.minute]) for x in time_list]
 
-    @property
-    def second(self):
+    def __second(self):
         time_list = list(set(map(lambda x: x.timestamp.second, self.query_data)))
         return [len([y for y in self.query_data if y.timestamp.second == x]) for x in time_list]
 
