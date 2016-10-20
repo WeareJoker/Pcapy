@@ -47,3 +47,4 @@ def analysis_pcap(pcap_path, user):
         u.alarm.append(Alarm("Success", "Finish Analysis %s" % db_pcap.fake_filename, simple_content="Finish Analysis"))
 
     db.session.commit()
+    print("Complete Analysis %s" % db_pcap.filename)
