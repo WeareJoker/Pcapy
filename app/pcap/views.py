@@ -11,8 +11,9 @@ from .analyser import analysis_pcap
 @login_required
 def result(pcap_name):
     u = current_user()
-    p = Pcap.query.filter_by(fake_filename=pcap_name, user=u).first()
-    if p is None:
+    try:
+        p = Pcap.find_pcap(user=u, fake_filename=pcap_name)
+    except NoInfoException:
         return "<script>alert('잘못된 접근입니다!');history.go(-1);</script>"
     else:
         return render_template('pcap/index.html',
