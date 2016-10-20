@@ -7,6 +7,10 @@ from datetime import datetime
 from flask_sqlalchemy import event
 
 
+class NoInfoException(Exception):
+    pass
+
+
 def add_and_commit(session, obj):
     session.add(obj)
     try:
