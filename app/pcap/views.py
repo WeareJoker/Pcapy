@@ -15,7 +15,7 @@ def result(pcap_name):
     if p is None:
         return "<script>alert('잘못된 접근입니다!');history.go(-1);</script>"
     else:
-        return render_template('main/index.html',
+        return render_template('pcap/index.html',
                                pcap=p,
                                user_pcap=u.pcap)
 
