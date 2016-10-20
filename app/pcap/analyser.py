@@ -19,7 +19,6 @@ def analysis_pcap(pcap_path, user):
     pcap_filename = os.path.basename(pcap_path)
 
     db_pcap = Pcap.query.filter_by(fake_filename=pcap_filename).first()
-    db_pcap.when_analysis_started = datetime.now()
 
     db_pcap.analysis = Analysis()
 
@@ -43,7 +42,7 @@ def analysis_pcap(pcap_path, user):
 
         db_pcap.analysis.total_packet = packet_count
         db_pcap.is_done = 1
-        db_pcap.when_analysis_finished = datetime.now()
+        db_pcap.analysis.when_analysis_finished = datetime.now()
         u.alarm.append(Alarm("Success", "Finish Analysis %s" % db_pcap.fake_filename, simple_content="Finish Analysis"))
 
     db.session.commit()
