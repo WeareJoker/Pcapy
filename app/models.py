@@ -15,6 +15,22 @@ class CustomGroupBy:
     def __init__(self, query_data):
         self.query_data = query_data
         self.time_list = self.__get_time_list()
+        self.check_time_unit()
+
+    def check_time_unit(self):
+        time_diff = datetime.fromtimestamp(
+            self.query_data[-1].timestamp.timestamp() - self.query_data[0].timestamp.timestamp()
+        )
+
+        if time_diff.hour > 14:
+            # this is hour type
+            pass
+        elif time_diff.minute > 6:
+            # this is minute type
+            pass
+        else:
+            # this is second type
+            pass
 
     def __get_time_list(self):
         return list(set(map(lambda x: x.timestamp.hour, self.query_data)))
@@ -121,9 +137,9 @@ class Analysis(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     pcap_id = db.Column(db.INTEGER, db.ForeignKey('pcap.id'))
     total_packet = db.Column(db.INTEGER)
-    dns_packet = db.relationship(DNSHost, backref='analysis', order_by='DNSHost.timestamp')
-    arp = db.relationship(ARP, backref='analysis', order_by='arp.timestamp')
-    http = db.relationship(HTTP, backref='analysis', order_by='http.timestamp')
+    dns_packet = db.relationship(DNSHost, backref='analysis', order_by=DNSHost.timestamp)
+    arp = db.relationship(ARP, backref='analysis', order_by=ARP.timestamp)
+    http = db.relationship(HTTP, backref='analysis', order_by=HTTP.timestamp)
     when_analysis_started = db.Column(db.DATETIME)
     when_analysis_finished = db.Column(db.DATETIME)
 
