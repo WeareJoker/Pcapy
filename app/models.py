@@ -14,8 +14,8 @@ class NoInfoException(Exception):
 class CustomGroupBy:
     def __init__(self, query_data):
         self.query_data = query_data
-        self.time_list = None
-        self.time_unit = self.__check_time_unit()
+        self.time_unit_func = self.__check_time_unit()
+        self.pkt_data = self.time_unit_func()
 
     def __check_time_unit(self):
         time_diff = datetime.fromtimestamp(
@@ -33,20 +33,16 @@ class CustomGroupBy:
             return self.__second
 
     def __hour(self):
-        self.time_list = list(set(map(lambda x: x.timestamp.hour, self.query_data)))
-        return [len([y for y in self.query_data if y.timestamp.hour == x]) for x in self.time_list]
+        time_list = list(set(map(lambda x: x.timestamp.hour, self.query_data)))
+        return [[y for y in self.query_data if y.timestamp.hour == x] for x in time_list]
 
     def __minute(self):
-        self.time_list = list(set(map(lambda x: x.timestamp.minute, self.query_data)))
-        return [len([y for y in self.query_data if y.timestamp.minute == x.minute]) for x in self.time_list]
+        time_list = list(set(map(lambda x: x.timestamp.minute, self.query_data)))
+        return [[y for y in self.query_data if y.timestamp.minute == x] for x in time_list]
 
     def __second(self):
-        self.time_list = list(set(map(lambda x: x.timestamp.second, self.query_data)))
-        return [len([y for y in self.query_data if y.timestamp.second == x]) for x in self.time_list]
-
-    @property
-    def pkt_data(self):
-        return self.time_list, self.time_unit()
+        time_list = list(set(map(lambda x: x.timestamp.second, self.query_data)))
+        return [[y for y in self.query_data if y.timestamp.second == x] for x in time_list]
 
 
 def add_and_commit(session, obj):
