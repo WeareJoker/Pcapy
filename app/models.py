@@ -14,8 +14,7 @@ class NoInfoException(Exception):
 class CustomGroupBy:
     def __init__(self, query_data):
         self.query_data = query_data
-        self.time_list = self.__get_time_list()
-        self.check_time_unit()
+        self.time_unit = self.check_time_unit()
 
     def check_time_unit(self):
         time_diff = datetime.fromtimestamp(
@@ -24,32 +23,33 @@ class CustomGroupBy:
 
         if time_diff.hour > 14:
             # this is hour type
-            pass
+            return self.hour
         elif time_diff.minute > 6:
             # this is minute type
-            pass
+            return self.minute
         else:
             # this is second type
-            pass
-
-    def __get_time_list(self):
-        return list(set(map(lambda x: x.timestamp.hour, self.query_data)))
+            return self.second
 
     @property
     def hour(self):
-        return [len([y for y in self.query_data if y.timestamp.hour == x]) for x in self.time_list]
+        time_list = list(set(map(lambda x: x.timestamp.hour, self.query_data)))
+        return [len([y for y in self.query_data if y.timestamp.hour == x]) for x in time_list]
 
     @property
     def minute(self):
-        return [len([y for y in self.query_data if y.timestamp.minute == x.minute]) for x in self.time_list]
+        time_list = list(set(map(lambda x: x.timestamp.minute, self.query_data)))
+        return [len([y for y in self.query_data if y.timestamp.minute == x.minute]) for x in time_list]
 
     @property
     def second(self):
-        return [len([y for y in self.query_data if y.timestamp.second == x]) for x in self.time_list]
+        time_list = list(set(map(lambda x: x.timestamp.second, self.query_data)))
+        return [len([y for y in self.query_data if y.timestamp.second == x]) for x in time_list]
 
     @property
     def microsecond(self):
-        return [len([y for y in self.query_data if y.timestamp.microsecond == x]) for x in self.time_list]
+        time_list = list(set(map(lambda x: x.timestamp.microsecond, self.query_data)))
+        return [len([y for y in self.query_data if y.timestamp.microsecond == x]) for x in time_list]
 
 
 def add_and_commit(session, obj):
