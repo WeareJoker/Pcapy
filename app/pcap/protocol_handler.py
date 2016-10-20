@@ -22,9 +22,7 @@ def analysis_http(eth, analysis):
         try:
             data = load_data.decode().split('\r\n')
             method, uri, _ = data[0].split()
-        except ValueError:
-            return
-        except UnicodeDecodeError:
+        except (ValueError, UnicodeDecodeError) as _:
             return
 
         host = data[1].split('Host: ')[-1]
