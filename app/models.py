@@ -11,23 +11,27 @@ class NoInfoException(Exception):
     pass
 
 
+def get_time_list(query_data):
+    return list(set(map(lambda x: x.timestamp.hour, query_data)))
+
+
 def group_by_hour(query_data):
-    time_list = list(set(map(lambda x: x.timestamp.hour, query_data)))
+    time_list = get_time_list(query_data)
     return time_list, [len([y for y in query_data if y.timestamp.hour == x]) for x in time_list]
 
 
 def group_by_minute(query_data):
-    time_list = list(set(map(lambda x: x.timestamp.minute, query_data)))
-    return time_list, [len([y for y in query_data if y.timestamp.minute == x]) for x in time_list]
+    time_list = get_time_list(query_data)
+    return time_list, [len([y for y in query_data if y.timestamp.minute == x.minute]) for x in time_list]
 
 
 def group_by_second(query_data):
-    time_list = list(set(map(lambda x: x.timestamp.second, query_data)))
+    time_list = get_time_list(query_data)
     return time_list, [len([y for y in query_data if y.timestamp.second == x]) for x in time_list]
 
 
 def group_by_microsecond(query_data):
-    time_list = list(set(map(lambda x: x.timestamp.microsecond, query_data)))
+    time_list = get_time_list(query_data)
     return time_list, [len([y for y in query_data if y.timestamp.microsecond == x]) for x in time_list]
 
 
