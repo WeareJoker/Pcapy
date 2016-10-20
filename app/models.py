@@ -126,6 +126,10 @@ class Analysis(db.Model):
     def __repr__(self):
         return "<Analysis %s>" % self.pcap.filename
 
+    @property
+    def kakao_url(self):
+        return HTTP.query.filter_by(analysis_id=self.id, kakao=True).all()
+
 
 @event.listens_for(Analysis, 'after_insert')
 def add_alarm_start_analysis(mapper, connection, target):
