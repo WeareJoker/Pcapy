@@ -33,18 +33,15 @@ def analysis_http(eth, analysis):
         #     matching[0].split()
         # check valid URL
 
-        if validators.domain(host) is not True:
+        if validators.domain(host) is not True or data[0] == 'HTTP/1.1':
             return
 
-        if data[0] == 'HTTP/1.1':
-            pass
-        else:
-            h = HTTP(host, uri, method)
-            db.session.add(h)
+        h = HTTP(host, uri, method)
+        db.session.add(h)
 
-            analysis.http.append(h)
+        analysis.http.append(h)
 
-            db.session.commit()
+        db.session.commit()
 
 
 def analysis_arp(eth, analysis):
