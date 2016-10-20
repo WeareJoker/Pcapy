@@ -38,10 +38,9 @@ def make_file_info(filename):
 @login_required
 def upload_pcap():
     if request.method == 'GET':
-        u = current_user()
         return render_template('pcap/upload_pcap.html',
                                pcap_id=randomkey(30),
-                               user_pcap=u.pcap)
+                               user=current_user())
 
     elif request.method == 'POST':
         pcap_file = request.files['pcap']
