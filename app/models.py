@@ -35,6 +35,7 @@ def get_or_create(session, model, **kwargs):
 class ARP(db.Model):
     __tablename__ = 'arp'
     id = db.Column(db.INTEGER, primary_key=True)
+    created_at = db.Column(db.DATETIME, nullable=False, default=datetime.now())
     op = db.Column(db.INTEGER)
     hwsrc = db.Column(db.String(20))
     hwdst = db.Column(db.String(20))
@@ -57,6 +58,7 @@ class ARP(db.Model):
 
 class HTTP(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
+    created_at = db.Column(db.DATETIME, nullable=False, default=datetime.now())
     host = db.Column(db.String(150), nullable=False)
     uri = db.Column(db.String(30), nullable=False)
     kakao = db.Column(db.BOOLEAN, default=False, nullable=False)
@@ -76,6 +78,7 @@ class HTTP(db.Model):
 class DNSHost(db.Model):
     __tablename__ = 'dnshost'
     id = db.Column(db.INTEGER, primary_key=True)
+    created_at = db.Column(db.DATETIME, nullable=False, default=datetime.now())
     host = db.Column(db.String(100), nullable=False)
     analysis_id = db.Column(db.INTEGER, db.ForeignKey('analysis.id'))
 
