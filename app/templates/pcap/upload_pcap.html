@@ -81,7 +81,7 @@
                             </div>
                             <div class="panel-body">
                                 <div class="list-group">
-                                    {% for pcap in user_pcap %}
+                                    {% for pcap in pcap.user.pcap %}
                                         <a href="{{ url_for('pcap.result', pcap_name=pcap.fake_filename) }}" class="list-group-item">
                                             <span class="badge">{{ pcap.upload_timestamp }}</span>
                                             {% if pcap.is_done == 0 %}
