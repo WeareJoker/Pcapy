@@ -35,7 +35,7 @@ def get_or_create(session, model, **kwargs):
 class ARP(db.Model):
     __tablename__ = 'arp'
     id = db.Column(db.INTEGER, primary_key=True)
-    created_at = db.Column(db.DATETIME, nullable=False, default=datetime.now())
+    timestamp = db.Column(db.DATETIME, nullable=False)
     op = db.Column(db.INTEGER)
     hwsrc = db.Column(db.String(20))
     hwdst = db.Column(db.String(20))
@@ -44,13 +44,14 @@ class ARP(db.Model):
 
     analysis_id = db.Column(db.INTEGER, db.ForeignKey('analysis.id'))
 
-    def __init__(self, hwsrc, hwdst, psrc, pdst, op=None):
+    def __init__(self, hwsrc, hwdst, psrc, pdst, timestamp, op=None):
         if op is not None:
             self.op = op
         self.hwsrc = hwsrc
         self.hwdst = hwdst
         self.psrc = psrc
         self.pdst = pdst
+        self.timestamp = timestamp
 
     def __repr__(self):
         return "<ARP %s>" % self.hwsrc
@@ -58,18 +59,19 @@ class ARP(db.Model):
 
 class HTTP(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
-    created_at = db.Column(db.DATETIME, nullable=False, default=datetime.now())
+    timestamp = db.Column(db.DATETIME, nullable=False)
     host = db.Column(db.String(150), nullable=False)
     uri = db.Column(db.String(30), nullable=False)
     kakao = db.Column(db.BOOLEAN, default=False, nullable=False)
     method = db.Column(db.String(20), nullable=False)
     analysis_id = db.Column(db.INTEGER, db.ForeignKey('analysis.id'))
 
-    def __init__(self, host, uri, method, kakao=False):
+    def __init__(self, host, uri, method, timestamp, kakao=False):
         self.host = host
         self.uri = uri
         self.method = method
         self.kakao = kakao
+        self.timestamp = timestamp
 
     def __repr__(self):
         return "<HTTP %s>" % self.host
@@ -78,12 +80,13 @@ class HTTP(db.Model):
 class DNSHost(db.Model):
     __tablename__ = 'dnshost'
     id = db.Column(db.INTEGER, primary_key=True)
-    created_at = db.Column(db.DATETIME, nullable=False, default=datetime.now())
+    timestamp = db.Column(db.DATETIME, nullable=False)
     host = db.Column(db.String(100), nullable=False)
     analysis_id = db.Column(db.INTEGER, db.ForeignKey('analysis.id'))
 
-    def __init__(self, host):
+    def __init__(self, host, timestamp):
         self.host = host
+        self.timestamp = timestamp
 
     def __repr__(self):
         return "<DNSHost %s>" % self.host
@@ -198,3 +201,4 @@ class User(db.Model):
 
     def __repr__(self):
         return "<User %s>" % self.userid
+# db.session.query(HTTP).filter_by(analysis_id=p.analysis.id).group_by(util.MINUTE(HTTP.analysis)).all()
