@@ -28,9 +28,7 @@ def analysis_http(eth, analysis):
             return
 
         host = data[1].split('Host: ')[-1]
-        # matching = [s for s in data if "Cookie" in s]
-        # if len(matching) != 0:
-        #     matching[0].split()
+
         # check valid URL
 
         if validators.domain(host) is not True or data[0] == 'HTTP/1.1':
