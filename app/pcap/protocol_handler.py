@@ -30,7 +30,8 @@ def analysis_http(eth, analysis):
     host = data[1].split('Host: ')[-1]
 
     # check valid URL
-    if validators.domain(host) is not True or data[0] == 'HTTP/1.1':
+    if validators.domain(host) is not True \
+            or data[0] == 'HTTP/1.1':
         return
 
     h = HTTP(host, uri, method)
