@@ -34,15 +34,15 @@ class CustomGroupBy:
 
     def __hour(self):
         self.time_list = list(set(map(lambda x: x.timestamp.hour, self.query_data)))
-        return [len([y for y in self.query_data if y.timestamp.hour == x]) for x in time_list]
+        return [len([y for y in self.query_data if y.timestamp.hour == x]) for x in self.time_list]
 
     def __minute(self):
         self.time_list = list(set(map(lambda x: x.timestamp.minute, self.query_data)))
-        return [len([y for y in self.query_data if y.timestamp.minute == x.minute]) for x in time_list]
+        return [len([y for y in self.query_data if y.timestamp.minute == x.minute]) for x in self.time_list]
 
     def __second(self):
         self.time_list = list(set(map(lambda x: x.timestamp.second, self.query_data)))
-        return [len([y for y in self.query_data if y.timestamp.second == x]) for x in time_list]
+        return [len([y for y in self.query_data if y.timestamp.second == x]) for x in self.time_list]
 
     @property
     def pkt_data(self):
