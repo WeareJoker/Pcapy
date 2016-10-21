@@ -35,12 +35,13 @@ def analysis_pcap(pcap_path, user):
         for pkt_time, buf in pcap_reader:
             packet_count += 1
             eth = Ether(buf)
+            pkt_datetime = datetime.fromtimestamp(pkt_time)
 
             for proto in packet_info_table.keys():
                 if proto in repr(eth):
-                    packet_info_table[proto](eth, db_pcap.analysis, datetime.fromtimestamp(pkt_time))
+                    packet_info_table[proto](eth, db_pcap.analysis, pkt_datetime)
             else:
-                db_pcap.analysis.other_pkt.append(OtherPkt(pkt_time))
+                db_pcap.analysis.other_pkt.append(OtherPkt(pkt_datetime))
                 db.session.commit()
 
         db_pcap.analysis.total_packet = packet_count
