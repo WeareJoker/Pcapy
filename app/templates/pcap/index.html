@@ -254,8 +254,8 @@
                 data: [
                     {% for pkt_time in all_pkt_time %}
                         {
-                            time: '{{ pkt_time.isoformat(sep=' ') }}',
-                            pkt: {{ all_pkt_data[pkt_time] | length }}
+                            pkt: {{ all_pkt_data[pkt_time] | length }},
+                            time: '{{ pkt_time.strftime(time_format) }}'
                         },
                     {% endfor %}
                 ],
