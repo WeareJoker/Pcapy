@@ -15,7 +15,7 @@ class CustomGroupBy:
     def __init__(self, query_data):
 
         self.query_data = query_data
-
+        self.print_format = None
         if len(self.query_data) != 0:
             self.time_list = list(set(map(lambda x: x.timestamp, self.query_data)))
             self.time_unit_func = self.__check_time_unit()
@@ -41,14 +41,20 @@ class CustomGroupBy:
             return self.__second
 
     def __hour(self):
+        self.print_format = "%Y-%m-%d %H:00:00"
+        self.time_list = [i.replace(minute=0, second=0, microsecond=0) for i in self.time_list]
         time_list = list(set(map(lambda x: x.timestamp.hour, self.query_data)))
         return [[y for y in self.query_data if y.timestamp.hour == x] for x in time_list]
 
     def __minute(self):
+        self.print_format = "%Y-%m-%d %H:%M:00"
+        self.time_list = [i.replace(second=0, microsecond=0) for i in self.time_list]
         time_list = list(set(map(lambda x: x.timestamp.minute, self.query_data)))
         return [[y for y in self.query_data if y.timestamp.minute == x] for x in time_list]
 
     def __second(self):
+        self.print_format = "%Y-%m-%d %H:%M:%S"
+        self.time_list = [i.replace(microsecond=0) for i in self.time_list]
         time_list = list(set(map(lambda x: x.timestamp.second, self.query_data)))
         return [[y for y in self.query_data if y.timestamp.second == x] for x in time_list]
 
