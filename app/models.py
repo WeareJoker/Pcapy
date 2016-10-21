@@ -182,7 +182,7 @@ class Analysis(db.Model):
 
     @property
     def all_pkt(self):
-        return self.dns_packet + self.arp + self.http
+        return self.dns_packet + self.arp + self.http + self.other_pkt
 
 
 @event.listens_for(Analysis, 'after_insert')
