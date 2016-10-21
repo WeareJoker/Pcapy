@@ -41,11 +41,7 @@
                                     </div>
                                     <div class="col-xs-9 text-right">
                                         <div class="huge">
-                                            {% if pcap.analysis.total_packet == None %}
-                                                {{ session['analysis_task'].status }}
-                                            {% else %}
-                                                {{ pcap.analysis.total_packet }}
-                                            {% endif %}
+                                            {{ pcap.analysis.total_packet }}
                                         </div>
                                         <div>Total Packets</div>
                                     </div>
