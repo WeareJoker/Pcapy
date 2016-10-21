@@ -39,6 +39,9 @@ def analysis_pcap(pcap_path, user):
             for proto in packet_info_table.keys():
                 if proto in repr(eth):
                     packet_info_table[proto](eth, db_pcap.analysis, datetime.fromtimestamp(pkt_time))
+            else:
+                db_pcap.analysis.other_pkt.append(OtherPkt(pkt_time))
+                db.session.commit()
 
         db_pcap.analysis.total_packet = packet_count
         db_pcap.is_done = 1
