@@ -162,7 +162,7 @@ class Analysis(db.Model):
 
 
 @event.listens_for(Analysis, 'after_insert')
-def add_alarm_start_analysis(mapper, connection, target):
+def add_alarm_start_analysis(_, connection, target):
     p = target.pcap
     u = p.user
 
@@ -208,7 +208,7 @@ class Pcap(db.Model):
 
 
 @event.listens_for(Pcap, 'after_insert')
-def add_alarm_upload_pcap(mapper, connection, target):
+def add_alarm_upload_pcap(_, connection, target):
     connection.execute(Alarm.__table__.insert().values(
         type="Success",
         content="Successfully Upload %s" % target.filename),
