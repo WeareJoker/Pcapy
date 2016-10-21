@@ -243,8 +243,6 @@
 {% endblock %}
 
 {% block footer %}
-    <!-- <script src="/js/plugins/morris/morris-data.js"></script> -->
-
     <script>
         // Morris.js Charts sample data for SB Admin template
 
@@ -253,60 +251,18 @@
             // Area Chart
             Morris.Area({
                 element: 'protocol-chart',
-                data: [{
-                    time: '2016-10-10 12:01:13.381941',
-                    http: 2666,
-                    arp: null,
-                    dns: 2647
-                }, {
-                    time: '2010 Q2',
-                    http: 2778,
-                    arp: 2294,
-                    dns: 2441
-                }, {
-                    time: '2010 Q3',
-                    http: 4912,
-                    arp: 1969,
-                    dns: 2501
-                }, {
-                    time: '2010 Q4',
-                    http: 3767,
-                    arp: 3597,
-                    dns: 5689
-                }, {
-                    time: '2011 Q1',
-                    http: 6810,
-                    arp: 1914,
-                    dns: 2293
-                }, {
-                    time: '2011 Q2',
-                    http: 5670,
-                    arp: 4293,
-                    dns: 1881
-                }, {
-                    time: '2011 Q3',
-                    http: 4820,
-                    arp: 3795,
-                    dns: 1588
-                }, {
-                    time: '2011 Q4',
-                    http: 15073,
-                    arp: 5967,
-                    dns: 5175
-                }, {
-                    time: '2012 Q1',
-                    http: 10687,
-                    arp: 4460,
-                    dns: 2028
-                }, {
-                    time: '2012 Q2',
-                    http: 8432,
-                    arp: 5713,
-                    dns: 1791
-                }],
+                data: [
+                    {% for pkt_time in all_pkt_time %}
+                        {
+                            time: '{{ pkt_time.isoformat(sep=' ') }}',
+                            pkt: {{ all_pkt_data[pkt_time] | length }}
+                        },
+                    {% endfor %}
+                ],
                 xkey: 'time',
-                ykeys: ['http', 'arp', 'dns'],
-                labels: ['HTTP', 'ARP', 'DNS'],
+                // ykeys: ['http', 'arp', 'dns'],
+                ykeys: ['pkt'],
+                labels: ['Packets'],
                 pointSize: 3,
                 hideHover: 'auto',
                 resize: true
@@ -326,7 +282,6 @@
                 resize: true
             });
         });
-
     </script>
 
 {% endblock %}
