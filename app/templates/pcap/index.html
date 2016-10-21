@@ -40,7 +40,13 @@
                                         <i class="fa fa-sellsy fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge">{{ pcap.analysis.total_packet }}</div>
+                                        <div class="huge">
+                                            {% if pcap.analysis.total_packet == None %}
+                                                {{ session['analysis_task'].status }}
+                                            {% else %}
+                                                {{ pcap.analysis.total_packet }}
+                                            {% endif %}
+                                        </div>
                                         <div>Total Packets</div>
                                     </div>
                                 </div>
