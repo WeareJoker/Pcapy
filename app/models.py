@@ -45,6 +45,13 @@ class CustomGroupBy:
         self.time_list = list(set(map(lambda x: x.timestamp.second, self.query_data)))
         return [[y for y in self.query_data if y.timestamp.second == x] for x in self.time_list]
 
+    @staticmethod
+    def sum_time_list(*args):
+        sum_data = list()
+        for group in args:
+            sum_data += group.time_list
+        return list(set(sum_data))
+
 
 def add_and_commit(session, obj):
     session.add(obj)
