@@ -146,6 +146,7 @@ class DNSHost(db.Model):
     def __repr__(self):
         return "<DNSHost %s>" % self.host
 
+
 class OtherPkt(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     analysis_id = db.Column(db.INTEGER, db.ForeignKey('analysis.id'))
@@ -156,6 +157,7 @@ class OtherPkt(db.Model):
 
     def __repr__(self):
         return "<UnKnown at %s>" % str(self.timestamp)
+
 
 class Analysis(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
