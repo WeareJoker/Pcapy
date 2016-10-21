@@ -64,6 +64,6 @@ def upload_pcap():
         u.pcap.append(p)
         db.session.commit()
 
-        session['analysis_task'] = analysis_pcap.delay(filepath, u.userid)
+        analysis_pcap.delay(filepath, u.userid)
 
         return filename
