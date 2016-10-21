@@ -22,8 +22,6 @@ def result(pcap_name):
 
         custom_group = CustomGroupBy(p.analysis.all_pkt)
 
-        all_time_data = CustomGroupBy.sum_time_list(custom_group)
-
         all_pkt_data = dict(zip(custom_group.time_list, custom_group.pkt_data))
 
         # all_pkt_data 0: HTTP, 1: DNS, 2: ARP
@@ -32,8 +30,9 @@ def result(pcap_name):
             'pcap/index.html',
             pcap=p,
             dns_data=dns_data,
-            all_pkt_time=sorted(set(all_time_data)),
-            all_pkt_data=all_pkt_data
+            all_pkt_time=sorted(set(custom_group.time_list)),
+            all_pkt_data=all_pkt_data,
+            time_format=custom_group.print_format
         )
 
 
