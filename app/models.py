@@ -146,6 +146,16 @@ class DNSHost(db.Model):
     def __repr__(self):
         return "<DNSHost %s>" % self.host
 
+class OtherPkt(db.Model):
+    id = db.Column(db.INTEGER, primary_key=True)
+    analysis_id = db.Column(db.INTEGER, db.ForeignKey('analysis.id'))
+    timestamp = db.Column(db.DATETIME, nullable=False)
+
+    def __init__(self, timestamp):
+        self.timestamp = timestamp
+
+    def __repr__(self):
+        return "<UnKnown at %s>" % str(self.timestamp)
 
 class Analysis(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
@@ -154,6 +164,7 @@ class Analysis(db.Model):
     dns_packet = db.relationship(DNSHost, backref='analysis', order_by=DNSHost.timestamp)
     arp = db.relationship(ARP, backref='analysis', order_by=ARP.timestamp)
     http = db.relationship(HTTP, backref='analysis', order_by=HTTP.timestamp)
+    other_pkt = db.relationship(OtherPkt, backref='analysis', order_by=OtherPkt.timestamp)
     when_analysis_started = db.Column(db.DATETIME)
     when_analysis_finished = db.Column(db.DATETIME)
 
