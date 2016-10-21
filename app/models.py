@@ -13,10 +13,16 @@ class NoInfoException(Exception):
 
 class CustomGroupBy:
     def __init__(self, query_data):
+
         self.query_data = query_data
-        self.time_unit_func = self.__check_time_unit()
         self.time_list = None
-        self.pkt_data = self.time_unit_func()
+
+        if len(self.query_data) != 0:
+            self.time_unit_func = self.__check_time_unit()
+            self.pkt_data = self.time_unit_func()
+        else:
+            self.time_unit_func = None
+            self.pkt_data = None
 
     def __check_time_unit(self):
         time_diff = datetime.fromtimestamp(
