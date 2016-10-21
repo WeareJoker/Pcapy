@@ -15,12 +15,13 @@ class CustomGroupBy:
     def __init__(self, query_data):
 
         self.query_data = query_data
-        self.time_list = None
 
         if len(self.query_data) != 0:
+            self.time_list = list(set(map(lambda x: x.timestamp, self.query_data)))
             self.time_unit_func = self.__check_time_unit()
             self.pkt_data = self.time_unit_func()
         else:
+            self.time_list = None
             self.time_unit_func = None
             self.pkt_data = None
 
@@ -40,16 +41,16 @@ class CustomGroupBy:
             return self.__second
 
     def __hour(self):
-        self.time_list = list(set(map(lambda x: x.timestamp.hour, self.query_data)))
-        return [[y for y in self.query_data if y.timestamp.hour == x] for x in self.time_list]
+        time_list = list(set(map(lambda x: x.timestamp.hour, self.query_data)))
+        return [[y for y in self.query_data if y.timestamp.hour == x] for x in time_list]
 
     def __minute(self):
-        self.time_list = list(set(map(lambda x: x.timestamp.minute, self.query_data)))
-        return [[y for y in self.query_data if y.timestamp.minute == x] for x in self.time_list]
+        time_list = list(set(map(lambda x: x.timestamp.minute, self.query_data)))
+        return [[y for y in self.query_data if y.timestamp.minute == x] for x in time_list]
 
     def __second(self):
-        self.time_list = list(set(map(lambda x: x.timestamp.second, self.query_data)))
-        return [[y for y in self.query_data if y.timestamp.second == x] for x in self.time_list]
+        time_list = list(set(map(lambda x: x.timestamp.second, self.query_data)))
+        return [[y for y in self.query_data if y.timestamp.second == x] for x in time_list]
 
     @staticmethod
     def sum_time_list(*args):
@@ -159,6 +160,10 @@ class Analysis(db.Model):
     @property
     def kakao_url(self):
         return HTTP.query.filter_by(analysis_id=self.id, kakao=True).all()
+
+    @property
+    def all_pkt(self):
+        return self.dns_packet + self.arp + self.http
 
 
 @event.listens_for(Analysis, 'after_insert')
