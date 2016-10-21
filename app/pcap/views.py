@@ -19,9 +19,22 @@ def result(pcap_name):
     else:
         dns_data = db.session.query(DNSHost.host, func.count(DNSHost.host)).filter_by(
             analysis_id=p.analysis.id).group_by(DNSHost.host).all()
-        return render_template('pcap/index.html',
-                               pcap=p,
-                               dns_data=dns_data)
+
+        custom_group = CustomGroupBy(p.analysis.all_pkt)
+
+        all_time_data = CustomGroupBy.sum_time_list(custom_group)
+
+        all_pkt_data = dict(zip(custom_group.time_list, custom_group.pkt_data))
+
+        # all_pkt_data 0: HTTP, 1: DNS, 2: ARP
+
+        return render_template(
+            'pcap/index.html',
+            pcap=p,
+            dns_data=dns_data,
+            all_pkt_time=sorted(set(all_time_data)),
+            all_pkt_data=all_pkt_data
+        )
 
 
 def make_file_info(filename):
