@@ -12,8 +12,8 @@ packet_info_table = {
 }
 
 
-@celery.task(bind=True)
-def analysis_pcap(self, pcap_path, user):
+@celery.task
+def analysis_pcap(pcap_path, user):
     u = current_user(user)
 
     pcap_filename = os.path.basename(pcap_path)
@@ -42,9 +42,9 @@ def analysis_pcap(self, pcap_path, user):
                     packet_info_table[proto](eth, db_pcap.analysis, pkt_datetime)
             else:
                 db_pcap.analysis.other_pkt.append(OtherPkt(pkt_datetime))
+                db_pcap.analysis.total_packet = packet_count
                 db.session.commit()
 
-        self.update_state(state=packet_count)
         db_pcap.analysis.total_packet = packet_count
         db_pcap.is_done = 1
         db_pcap.analysis.when_analysis_finished = datetime.now()
