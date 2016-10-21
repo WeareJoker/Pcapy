@@ -27,7 +27,7 @@ class CustomGroupBy:
 
     def __check_time_unit(self):
         time_diff = datetime.fromtimestamp(
-            self.query_data[-1].timestamp.timestamp() - self.query_data[0].timestamp.timestamp()
+            max(self.time_list).timestamp() - min(self.time_list).timestamp()
         )
 
         if time_diff.hour > 14:
