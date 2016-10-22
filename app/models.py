@@ -33,7 +33,7 @@ class CustomGroupBy:
         if time_diff.hour > 14:
             # this is hour type
             return self.__hour
-        elif time_diff.minute > 6:
+        elif time_diff.minute > 15:
             # this is minute type
             return self.__minute
         else:
