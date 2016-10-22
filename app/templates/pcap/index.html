@@ -255,10 +255,13 @@
                 element: 'protocol-chart',
                 data: [
                     {% for pkt_time in all_pkt_time %}
+                        {% set length_data = all_pkt_data[pkt_time] | length %}
+                        {% if length_data != 0 %}
                         {
-                            pkt: {{ all_pkt_data[pkt_time] | length }},
+                            pkt: {{ length_data }},
                             time: '{{ pkt_time.strftime(time_format) }}'
                         },
+                        {% endif %}
                     {% endfor %}
                 ],
                 xkey: 'time',
