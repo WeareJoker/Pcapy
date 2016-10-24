@@ -173,6 +173,23 @@
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
+                    {% if session['login'] == True %}
+                        {% if user is defined %}
+                            {% set cur_user = user %}
+                        {% elif pcap is defined %}
+                            {% set cur_user = pcap.user %}
+                        {% endif %}
+                        <li>
+                            <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-dashboard"></i> Uploaded Files <i class="fa fa-fw fa-caret-down"></i></a>
+                            <ul id="demo" class="collapse">
+                                {% for pcap in cur_user.pcap %}
+                                    <li>
+                                        <a href="{{ url_for('pcap.result', pcap_name=pcap.fake_filename) }}">{{ pcap.filename }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endif %}
                     <!--
                     <li>
                         <a href="{{ url_for('main.index') }}"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
