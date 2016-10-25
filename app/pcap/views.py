@@ -67,3 +67,16 @@ def upload_pcap():
         analysis_pcap.delay(filepath, u.userid)
 
         return filename
+
+
+@pcap_blueprint.route('/dns/<pcap_name>')
+@login_required
+def result_dns(pcap_name):
+    try:
+        p = Pcap.find_pcap(user=current_user(), fake_filename=pcap_name)
+    except NoInfoException:
+        return "<script>alert('잘못된 접근입니다!');history.go(-1);</script>"
+    else:
+        dns_data = db.session.query(DNSHost.host, func.count(DNSHost.host)).filter_by(
+            analysis_id=p.analysis.id).group_by(DNSHost.host).all()
+        return render_template('pcap/dns.html')
