@@ -30,6 +30,7 @@ def result(pcap_name):
     except NoInfoException:
         return "<script>alert('잘못된 접근입니다!');history.go(-1);</script>"
     else:
+        session['pcap'] = pcap_name
         dns_data = db.session.query(DNSHost.host, func.count(DNSHost.host)).filter_by(
             analysis_id=p.analysis.id).group_by(DNSHost.host).all()
 
