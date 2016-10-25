@@ -9,6 +9,19 @@ from .analyser import analysis_pcap
 from sqlalchemy import func
 
 
+def pcap_required(func):
+    @wraps(func)
+    def check_pcap_select(*args, **kwargs):
+        try:
+            assert session['pcap']
+        except KeyError:
+            return "<script>alert('분석할 패킷 파일을 선택해주세요!');history.go(-1);</script>"
+        else:
+            return func(*args, **kwargs)
+
+    return check_pcap_select
+
+
 @pcap_blueprint.route('/result/<pcap_name>')
 @login_required
 def result(pcap_name):
