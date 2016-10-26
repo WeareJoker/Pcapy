@@ -38,7 +38,7 @@ def logout_required(func):
 def login_user(userid):
     session['login'] = True
     session['userid'] = userid
-    session['pcap'] = None
+    session['pcap'] = "error"
 
 
 def logout_user():
