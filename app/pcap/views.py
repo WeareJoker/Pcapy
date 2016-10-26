@@ -1,13 +1,14 @@
 import os
-from app.config import randomkey, PCAP_FILE_PATH
-from flask import render_template, request
-from . import pcap_blueprint
-from app.user.login_manager import *
-from app.models import *
-from .analyser import analysis_pcap
 
-from sqlalchemy import func
+from flask import render_template, request
 from sqlalchemy import extract
+from sqlalchemy import func
+
+from app.config import randomkey, PCAP_FILE_PATH
+from app.models import *
+from app.user.login_manager import *
+from . import pcap_blueprint
+from .analyser import analysis_pcap
 
 
 def pcap_required(func):
