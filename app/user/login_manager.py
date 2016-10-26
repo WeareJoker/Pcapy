@@ -38,11 +38,13 @@ def logout_required(func):
 def login_user(userid):
     session['login'] = True
     session['userid'] = userid
+    session['pcap'] = None
 
 
 def logout_user():
     session['login'] = False
     session['userid'] = None
+    del session['pcap']
 
 
 def current_user(userid=None):
