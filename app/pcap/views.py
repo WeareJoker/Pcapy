@@ -13,8 +13,8 @@ def pcap_required(func):
     @wraps(func)
     def check_pcap_select(*args, **kwargs):
         try:
-            assert session['pcap']
-        except KeyError:
+            assert session['pcap'] != 'error'
+        except (KeyError, AssertionError):
             return "<script>alert('분석할 패킷 파일을 선택해주세요!');history.go(-1);</script>"
         else:
             return func(*args, **kwargs)
@@ -85,6 +85,7 @@ def upload_pcap():
 
 @pcap_blueprint.route('/dns/<pcap_name>')
 @login_required
+@pcap_required
 def result_dns(pcap_name):
     try:
         p = Pcap.find_pcap(user=current_user(), fake_filename=pcap_name)
