@@ -5,7 +5,7 @@ from app.models import *
 
 def analysis_dns(eth, analysis, pkt_time):
     hostname = eth[3].qd.qname.decode()
-    d = DNSHost(hostname, pkt_time)
+    d = DNSHost(hostname, pkt_time, eth[1].src, eth[1].dst)
     db.session.add(d)
     analysis.dns_packet.append(d)
 
