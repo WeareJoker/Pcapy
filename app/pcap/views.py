@@ -95,3 +95,4 @@ def result_dns(pcap_name):
             analysis_id=p.analysis.id).group_by(DNSHost.host).all()
         return render_template('pcap/dns.html',
                                pcap=p)
+                               dns_data=dns_data)
