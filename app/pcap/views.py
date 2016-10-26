@@ -24,7 +24,6 @@ def pcap_required(func):
 
 @pcap_blueprint.route('/result/<pcap_name>')
 @login_required
-@pcap_required
 def result(pcap_name):
     try:
         p = Pcap.find_pcap(user=current_user(), fake_filename=pcap_name)
