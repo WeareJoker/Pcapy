@@ -157,7 +157,7 @@ class OtherPkt(db.Model):
     timestamp = db.Column(db.DATETIME, nullable=False)
 
     def __init__(self, timestamp):
-        self.timestamp = timestamp
+        self.timestamp = timestamp.replace(microsecond=0)
 
     def __repr__(self):
         return "<UnKnown at %s>" % str(self.timestamp)
