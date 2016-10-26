@@ -7,6 +7,7 @@ from app.models import *
 from .analyser import analysis_pcap
 
 from sqlalchemy import func
+from sqlalchemy import extract
 
 
 def pcap_required(func):
@@ -34,19 +35,37 @@ def result(pcap_name):
         dns_data = db.session.query(DNSHost.host, func.count(DNSHost.host)).filter_by(
             analysis_id=p.analysis.id).group_by(DNSHost.host).all()
 
-        custom_group = CustomGroupBy(p.analysis.all_pkt)
+        all_time = sorted(set(map(lambda x: x.timestamp, p.analysis.all_pkt)))
 
-        all_pkt_data = dict(zip(custom_group.time_list, custom_group.pkt_data))
+        http_set = dict(
+            db.session.query(HTTP.timestamp, func.count(HTTP.host)).filter_by(
+                analysis_id=p.analysis.id).group_by(extract('second', HTTP.timestamp)).all()
+        )
 
-        # all_pkt_data 0: HTTP, 1: DNS, 2: ARP
+        dns_set = dict(
+            db.session.query(DNSHost.timestamp, func.count(DNSHost.host)).filter_by(
+                analysis_id=p.analysis.id).group_by(extract('second', DNSHost.timestamp)).all()
+        )
+
+        arp_set = dict(
+            db.session.query(ARP.timestamp, func.count(ARP.hwsrc)).filter_by(
+                analysis_id=p.analysis.id).group_by(extract('second', ARP.timestamp)).all()
+        )
+
+        other_set = dict(
+            db.session.query(OtherPkt.timestamp, func.count(OtherPkt.id)).filter_by(
+                analysis_id=p.analysis.id).group_by(extract('second', OtherPkt.timestamp)).all()
+        )
 
         return render_template(
             'pcap/index.html',
             pcap=p,
-            dns_data=dns_data,
-            all_pkt_time=sorted(set(custom_group.time_list)),
-            all_pkt_data=all_pkt_data,
-            time_format=custom_group.print_format
+            all_pkt_time=all_time,
+            http_data=http_set,
+            dns_data=dns_set,
+            arp_data=arp_set,
+            other_data=other_set,
+            dns_count_list=dns_data
         )
 
 

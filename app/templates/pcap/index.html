@@ -256,19 +256,18 @@
                 element: 'protocol-chart',
                 data: [
                     {% for pkt_time in all_pkt_time %}
-                        {% set length_data = all_pkt_data[pkt_time] | length %}
-                        {% if length_data != 0 %}
                         {
-                            pkt: {{ length_data }},
-                            time: '{{ pkt_time.strftime(time_format) }}'
+                            http: {{ http_data[pkt_time] | get_valid_pkt_data }},
+                            arp: {{ arp_data[pkt_time] | get_valid_pkt_data }},
+                            dns: {{ dns_data[pkt_time] | get_valid_pkt_data }},
+                            other: {{ other_data[pkt_time] | get_valid_pkt_data }},
+                            time: '{{ pkt_time }}'
                         },
-                        {% endif %}
                     {% endfor %}
                 ],
                 xkey: 'time',
-                // ykeys: ['http', 'arp', 'dns'],
-                ykeys: ['pkt'],
-                labels: ['Packets'],
+                ykeys: ['http', 'arp', 'dns', 'other'],
+                labels: ['HTTP', 'ARP', 'DNS', 'Other'],
                 pointSize: 3,
                 hideHover: 'auto',
                 resize: true
@@ -278,7 +277,7 @@
             Morris.Donut({
                 element: 'morris-donut-chart',
                 data: [
-                    {% for host, count in dns_data %}
+                    {% for host, count in dns_count_list %}
                         {
                             label: "{{ host }}",
                             value: {{ count }}
