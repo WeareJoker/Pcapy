@@ -138,6 +138,8 @@ class DNSHost(db.Model):
     timestamp = db.Column(db.DATETIME, nullable=False)
     host = db.Column(db.String(100), nullable=False)
     analysis_id = db.Column(db.INTEGER, db.ForeignKey('analysis.id'))
+    src_ip = db.Column(db.String(16), nullable=False)
+    dst_ip = db.Column(db.String(16), nullable=False)
 
     def __init__(self, host, timestamp, src_ip, dst_ip):
         self.host = host
