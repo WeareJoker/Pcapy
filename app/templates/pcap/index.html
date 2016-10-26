@@ -130,6 +130,9 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Protocol View</h3>
+                            <a href="{{ url_for('pcap.result', pcap_name=session['pcap'], graph_type='hour') }}">Hour</a>
+                            <a href="{{ url_for('pcap.result', pcap_name=session['pcap'], graph_type='minute') }}">Minute</a>
+                            <a href="{{ url_for('pcap.result', pcap_name=session['pcap'], graph_type='second') }}">Second</a>
                         </div>
                         <div class="panel-body">
                             <div id="protocol-chart"></div>
