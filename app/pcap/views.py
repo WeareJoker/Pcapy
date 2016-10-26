@@ -94,5 +94,5 @@ def result_dns(pcap_name):
         dns_data = db.session.query(DNSHost.host, func.count(DNSHost.host)).filter_by(
             analysis_id=p.analysis.id).group_by(DNSHost.host).all()
         return render_template('pcap/dns.html',
-                               pcap=p)
+                               pcap=p,
                                dns_data=dns_data)
