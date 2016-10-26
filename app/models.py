@@ -139,9 +139,11 @@ class DNSHost(db.Model):
     host = db.Column(db.String(100), nullable=False)
     analysis_id = db.Column(db.INTEGER, db.ForeignKey('analysis.id'))
 
-    def __init__(self, host, timestamp):
+    def __init__(self, host, timestamp, src_ip, dst_ip):
         self.host = host
         self.timestamp = timestamp
+        self.src_ip = src_ip
+        self.dst_ip = dst_ip
 
     def __repr__(self):
         return "<DNSHost %s>" % self.host
