@@ -106,7 +106,7 @@ class ARP(db.Model):
         self.hwdst = hwdst
         self.psrc = psrc
         self.pdst = pdst
-        self.timestamp = timestamp
+        self.timestamp = timestamp.replace(microsecond=0)
 
     def __repr__(self):
         return "<ARP %s>" % self.hwsrc
@@ -126,7 +126,7 @@ class HTTP(db.Model):
         self.uri = uri
         self.method = method
         self.kakao = kakao
-        self.timestamp = timestamp
+        self.timestamp = timestamp.replace(microsecond=0)
 
     def __repr__(self):
         return "<HTTP %s %s>" % (self.host, str(self.timestamp))
@@ -143,7 +143,7 @@ class DNSHost(db.Model):
 
     def __init__(self, host, timestamp, src_ip, dst_ip):
         self.host = host
-        self.timestamp = timestamp
+        self.timestamp = timestamp.replace(microsecond=0)
         self.src_ip = src_ip
         self.dst_ip = dst_ip
 
