@@ -11,15 +11,15 @@ from . import pcap_blueprint
 from .analyser import analysis_pcap
 
 
-def pcap_required(func):
-    @wraps(func)
+def pcap_required(need_pcap_func):
+    @wraps(need_pcap_func)
     def check_pcap_select(*args, **kwargs):
         try:
             assert session['pcap'] != 'error'
         except (KeyError, AssertionError):
             return "<script>alert('분석할 패킷 파일을 선택해주세요!');history.go(-1);</script>"
         else:
-            return func(*args, **kwargs)
+            return need_pcap_func(*args, **kwargs)
 
     return check_pcap_select
 
