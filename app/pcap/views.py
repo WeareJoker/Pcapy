@@ -24,6 +24,17 @@ def pcap_required(need_pcap_func):
     return check_pcap_select
 
 
+def make_param_by_graph_type(got_type):
+    data_set = {
+        'minute': dict(second=0),
+        'hour': dict(minute=0, second=0)
+    }
+    try:
+        return data_set[got_type]
+    except KeyError:
+        return data_set['minute']
+
+
 @pcap_blueprint.route('/result/<pcap_name>')
 @login_required
 def result(pcap_name):
