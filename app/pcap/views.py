@@ -81,6 +81,10 @@ def result(pcap_name):
         db.session.query(OtherPkt.timestamp, func.count(OtherPkt.id)).filter_by(
             analysis_id=p.analysis.id).group_by(extract(graph_type, OtherPkt.timestamp)).all()
     )
+    if convert_type is not None:  # Have to Change datetime form
+        for data_set in [http_set, dns_set, arp_set, other_set]:
+            for data_set_key in data_set:
+                data_set[data_set_key.replace(**convert_type)] = data_set.pop(data_set_key)
 
     return render_template(
         'pcap/index.html',
