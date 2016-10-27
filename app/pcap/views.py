@@ -3,6 +3,7 @@ import os
 from flask import render_template, request
 from sqlalchemy import extract
 from sqlalchemy import func
+from werkzeug.exceptions import BadRequestKeyError
 
 from app.config import randomkey, PCAP_FILE_PATH
 from app.models import *
@@ -42,7 +43,7 @@ def result(pcap_name):
         p = Pcap.find_pcap(user=current_user(), fake_filename=pcap_name)
     except NoInfoException:
         return "<script>alert('잘못된 접근입니다!');history.go(-1);</script>"
-    else:
+    except BadRequestKeyError:
         session['pcap'] = pcap_name
         dns_data = db.session.query(DNSHost.host, func.count(DNSHost.host)).filter_by(
             analysis_id=p.analysis.id).group_by(DNSHost.host).all()
