@@ -48,7 +48,7 @@ def result(pcap_name):
         graph_type = request.args['graph_type']
 
     except BadRequestKeyError:
-        graph_type = 'second'
+        return redirect(url_for('pcap.result', pcap_name=pcap_name, graph_type='second'))
 
     session['pcap'] = pcap_name
     dns_data = db.session.query(DNSHost.host, func.count(DNSHost.host)).filter_by(
