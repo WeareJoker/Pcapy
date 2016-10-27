@@ -7,7 +7,6 @@ billiard==3.3.0.23
 celery==3.1.24
 click==6.6
 decorator==4.0.10
-dpkt==1.8.6.2
 Flask==0.11.1
 Flask-Migrate==2.0.0
 Flask-Script==2.0.5
