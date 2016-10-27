@@ -43,43 +43,56 @@ def result(pcap_name):
         p = Pcap.find_pcap(user=current_user(), fake_filename=pcap_name)
     except NoInfoException:
         return "<script>alert('잘못된 접근입니다!');history.go(-1);</script>"
+
+    try:
+        graph_type = request.args['graph_type']
+
     except BadRequestKeyError:
-        session['pcap'] = pcap_name
-        dns_data = db.session.query(DNSHost.host, func.count(DNSHost.host)).filter_by(
-            analysis_id=p.analysis.id).group_by(DNSHost.host).all()
+        graph_type = 'second'
 
+    session['pcap'] = pcap_name
+    dns_data = db.session.query(DNSHost.host, func.count(DNSHost.host)).filter_by(
+        analysis_id=p.analysis.id).group_by(DNSHost.host).all()
+
+    if graph_type == 'second':
+        convert_type = None
         all_time = sorted(set(map(lambda x: x.timestamp, p.analysis.all_pkt)))
+    else:
+        convert_type = make_param_by_graph_type(graph_type)
+        all_time = sorted(set(map(lambda x: x.timestamp.replace(**convert_type),
+                                  p.analysis.all_pkt)))
 
-        http_set = dict(
-            db.session.query(HTTP.timestamp, func.count(HTTP.host)).filter_by(
-                analysis_id=p.analysis.id).group_by(extract('second', HTTP.timestamp)).all()
-        )
+    http_set = dict(
+        db.session.query(HTTP.timestamp, func.count(HTTP.host)).filter_by(
+            analysis_id=p.analysis.id).group_by(extract(graph_type, HTTP.timestamp)).all()
+    )
 
-        dns_set = dict(
-            db.session.query(DNSHost.timestamp, func.count(DNSHost.host)).filter_by(
-                analysis_id=p.analysis.id).group_by(extract('second', DNSHost.timestamp)).all()
-        )
+    dns_set = dict(
+        db.session.query(DNSHost.timestamp, func.count(DNSHost.host)).filter_by(
+            analysis_id=p.analysis.id).group_by(extract(graph_type, DNSHost.timestamp)).all()
+    )
 
-        arp_set = dict(
-            db.session.query(ARP.timestamp, func.count(ARP.hwsrc)).filter_by(
-                analysis_id=p.analysis.id).group_by(extract('second', ARP.timestamp)).all()
-        )
+    arp_set = dict(
+        db.session.query(ARP.timestamp, func.count(ARP.hwsrc)).filter_by(
+            analysis_id=p.analysis.id).group_by(extract(graph_type, ARP.timestamp)).all()
+    )
 
-        other_set = dict(
-            db.session.query(OtherPkt.timestamp, func.count(OtherPkt.id)).filter_by(
-                analysis_id=p.analysis.id).group_by(extract('second', OtherPkt.timestamp)).all()
-        )
+    other_set = dict(
+        db.session.query(OtherPkt.timestamp, func.count(OtherPkt.id)).filter_by(
+            analysis_id=p.analysis.id).group_by(extract(graph_type, OtherPkt.timestamp)).all()
+    )
 
-        return render_template(
-            'pcap/index.html',
-            pcap=p,
-            all_pkt_time=all_time,
-            http_data=http_set,
-            dns_data=dns_set,
-            arp_data=arp_set,
-            other_data=other_set,
-            dns_count_list=dns_data
-        )
+    return render_template(
+        'pcap/index.html',
+        pcap=p,
+        all_pkt_time=all_time,
+        http_data=http_set,
+        dns_data=dns_set,
+        arp_data=arp_set,
+        other_data=other_set,
+        dns_count_list=dns_data,
+        graph_type=graph_type
+    )
 
 
 def make_file_info(filename):
