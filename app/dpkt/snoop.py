@@ -3,7 +3,7 @@
 """Snoop file format."""
 
 import sys, time
-import dpkt
+from . import dpkt
 
 # RFC 1761
 

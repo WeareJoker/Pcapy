@@ -4,7 +4,7 @@
 
 import itertools
 import struct
-import dpkt
+from . import dpkt
 
 
 class NetflowBase(dpkt.Packet):

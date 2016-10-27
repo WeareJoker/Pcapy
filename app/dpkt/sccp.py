@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Cisco Skinny Client Control Protocol."""
 
-import dpkt
+from . import dpkt
 
 KEYPAD_BUTTON = 0x00000003
 OFF_HOOK = 0x00000006

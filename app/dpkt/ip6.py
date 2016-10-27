@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Internet Protocol, version 6."""
 
-import dpkt
+from . import dpkt
 from .decorators import deprecated
 from . import compatible
 

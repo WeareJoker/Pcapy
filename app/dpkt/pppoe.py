@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """PPP-over-Ethernet."""
 
-import dpkt
+from . import dpkt
 from . import ppp
 from .decorators import deprecated
 

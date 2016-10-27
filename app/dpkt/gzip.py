@@ -4,7 +4,7 @@
 
 import struct
 import zlib
-import dpkt
+from . import dpkt
 
 
 # RFC 1952

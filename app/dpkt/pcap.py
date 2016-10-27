@@ -4,7 +4,7 @@
 
 import sys
 import time
-import dpkt
+from . import dpkt
 try:
     import io
 except ImportError:

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Transmission Control Protocol."""
 
-import dpkt
+from . import dpkt
 from .decorators import deprecated
 from . import compatible
 

@@ -3,7 +3,7 @@
 """Remote Procedure Call."""
 
 import struct
-import dpkt
+from . import dpkt
 
 # RPC.dir
 CALL = 0

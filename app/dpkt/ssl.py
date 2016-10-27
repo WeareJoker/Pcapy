@@ -3,7 +3,7 @@
 # -*- coding: utf-8 -*-
 """Secure Sockets Layer / Transport Layer Security."""
 
-import dpkt
+from . import dpkt
 from . import ssl_ciphersuites
 import struct
 import binascii

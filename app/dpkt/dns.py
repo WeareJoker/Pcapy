@@ -3,7 +3,7 @@
 """Domain Name System."""
 
 import struct
-import dpkt
+from . import dpkt
 import sys
 from .decorators import deprecated
 from . import compatible

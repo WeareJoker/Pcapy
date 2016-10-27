@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """ATA over Ethernet ATA command"""
 
-import dpkt
+from . import dpkt
 
 
 class AOECFG(dpkt.Packet):

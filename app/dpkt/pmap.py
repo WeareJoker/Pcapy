@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Portmap / rpcbind."""
 
-import dpkt
+from . import dpkt
 
 PMAP_PROG = 100000
 PMAP_PROCDUMP = 4

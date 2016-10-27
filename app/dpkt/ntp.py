@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Network Time Protocol."""
 
-import dpkt
+from . import dpkt
 from .decorators import deprecated
 
 # NTP v4

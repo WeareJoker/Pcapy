@@ -4,7 +4,7 @@
 
 import struct
 import socket
-import dpkt
+from . import dpkt
 from .decorators import deprecated
 
 

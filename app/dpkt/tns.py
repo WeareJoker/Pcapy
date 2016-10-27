@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Transparent Network Substrate."""
 
-import dpkt
+from . import dpkt
 
 
 class TNS(dpkt.Packet):

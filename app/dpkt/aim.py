@@ -3,7 +3,7 @@
 
 """AOL Instant Messenger."""
 
-import dpkt
+from . import dpkt
 import struct
 
 # OSCAR: http://iserverd1.khstu.ru/oscar/

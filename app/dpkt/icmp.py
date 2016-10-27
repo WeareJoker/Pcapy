@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Internet Control Message Protocol."""
 
-import dpkt
+from . import dpkt
 from . import ip
 
 # Types (icmp_type) and codes (icmp_code) -

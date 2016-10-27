@@ -3,7 +3,7 @@
 """Generic Routing Encapsulation."""
 
 import struct
-import dpkt
+from . import dpkt
 from .decorators import deprecated
 
 GRE_CP = 0x8000  # Checksum Present

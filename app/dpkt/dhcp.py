@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Dynamic Host Configuration Protocol."""
 
-import dpkt
+from . import dpkt
 import sys
 import struct
 from . import arp

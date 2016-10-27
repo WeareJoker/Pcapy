@@ -3,7 +3,7 @@
 """Point-to-Point Protocol."""
 
 import struct
-import dpkt
+from . import dpkt
 
 # XXX - finish later
 

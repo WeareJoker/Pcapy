@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Linux libpcap "cooked" capture encapsulation."""
 
-import dpkt
+from . import dpkt
 from . import arp
 from . import ethernet
 

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Stream Control Transmission Protocol."""
 
-import dpkt
+from . import dpkt
 from . import crc32c
 
 # Stream Control Transmission Protocol

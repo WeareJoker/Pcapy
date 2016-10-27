@@ -3,7 +3,7 @@
 """ITU-T H.225.0 Call Signaling."""
 
 import struct
-import dpkt
+from . import dpkt
 from . import tpkt
 
 

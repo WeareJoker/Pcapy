@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Radiotap"""
 
-import dpkt
+from . import dpkt
 import socket
 from . import ieee80211
 from .decorators import deprecated

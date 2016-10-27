@@ -3,7 +3,7 @@
 """Trivial File Transfer Protocol."""
 
 import struct
-import dpkt
+from . import dpkt
 import sys
 
 # Opcodes

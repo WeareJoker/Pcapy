@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Real-Time Transport Protocol"""
 
-from dpkt import Packet
+from .dpkt import Packet
 from .decorators import deprecated
 
 # version 1100 0000 0000 0000 ! 0xC000  14

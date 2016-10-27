@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Platform-dependent loopback header."""
 
-import dpkt
+from . import dpkt
 from . import ethernet
 from . import ip
 from . import ip6

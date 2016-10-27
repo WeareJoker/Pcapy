@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Internet Control Message Protocol for IPv6."""
 
-import dpkt
+from . import dpkt
 from . import ip6
 
 ICMP6_DST_UNREACH = 1  # dest unreachable, codes:

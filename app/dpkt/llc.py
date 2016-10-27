@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import struct
-import dpkt
+from . import dpkt
 from . import stp
 from . import ethernet
 

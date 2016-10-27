@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Spanning Tree Protocol."""
 
-import dpkt
+from . import dpkt
 
 
 class STP(dpkt.Packet):

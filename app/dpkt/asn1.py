@@ -4,7 +4,7 @@
 
 import struct
 import time
-import dpkt
+from . import dpkt
 import sys
 from . import compatible
 

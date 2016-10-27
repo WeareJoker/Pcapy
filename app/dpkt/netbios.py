@@ -3,7 +3,7 @@
 """Network Basic Input/Output System."""
 
 import struct
-import dpkt
+from . import dpkt
 from . import dns
 
 

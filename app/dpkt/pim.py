@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Protocol Independent Multicast."""
 
-import dpkt
+from . import dpkt
 from .decorators import deprecated
 
 

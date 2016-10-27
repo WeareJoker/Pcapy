@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Remote Authentication Dial-In User Service."""
 
-import dpkt
+from . import dpkt
 from . import compatible
 
 # http://www.untruth.org/~josh/security/radius/radius-auth.html

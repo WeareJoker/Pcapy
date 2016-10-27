@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Multi-threaded Routing Toolkit."""
 
-import dpkt
+from . import dpkt
 from . import bgp
 
 # Multi-threaded Routing Toolkit

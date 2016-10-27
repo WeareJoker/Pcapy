@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Internet Protocol."""
 
-import dpkt
+from . import dpkt
 from .decorators import deprecated
 
 

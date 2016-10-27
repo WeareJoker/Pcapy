@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Hypertext Transfer Protocol."""
 
-import dpkt
+from . import dpkt
 import sys
 
 if sys.version_info < (3,):

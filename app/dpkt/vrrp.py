@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Virtual Router Redundancy Protocol."""
 
-import dpkt
+from . import dpkt
 from .decorators import deprecated
 
 

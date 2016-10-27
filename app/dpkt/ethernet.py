@@ -4,7 +4,7 @@
 with automatic 802.1q, MPLS, PPPoE, and Cisco ISL decapsulation."""
 
 import struct
-import dpkt
+from . import dpkt
 from . import stp
 
 

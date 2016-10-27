@@ -2,7 +2,7 @@
 """ATA over Ethernet Protocol."""
 
 import struct
-import dpkt
+from . import dpkt
 from .decorators import deprecated
 
 

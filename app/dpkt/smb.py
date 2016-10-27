@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Server Message Block."""
 
-import dpkt
+from . import dpkt
 
 
 class SMB(dpkt.Packet):
